@@ -1,0 +1,106 @@
+.round-end-container {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+
+  h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+  }
+
+  .round-summary {
+    .round-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 30px;
+
+      .stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .stat-label {
+          color: $text-secondary;
+          margin-bottom: 8px;
+        }
+
+        .stat-value {
+          font-size: 36px;
+          font-weight: 700;
+
+          &.correct {
+            color: $success-color;
+          }
+
+          &.skipped {
+            color: $warning-color;
+          }
+
+          &.points {
+            color: $primary-color;
+          }
+        }
+      }
+    }
+
+    .word-list {
+      margin: 30px 0;
+
+      h3 {
+        margin-bottom: 15px;
+      }
+
+      .words-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+        max-height: 300px;
+        overflow-y: auto;
+
+        .word-item {
+          padding: 10px;
+          border-radius: 6px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          &.correct {
+            background: rgba($success-color, 0.1);
+            border-left: 3px solid $success-color;
+
+            .word-status {
+              color: $success-color;
+            }
+          }
+
+          &.skipped {
+            background: rgba($warning-color, 0.1);
+            border-left: 3px solid $warning-color;
+
+            .word-status {
+              color: $warning-color;
+            }
+          }
+
+          .word-text {
+            font-weight: 500;
+          }
+        }
+      }
+    }
+
+    .next-round-info {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      font-weight: 600;
+      color: $text-primary;
+    }
+  }
+}

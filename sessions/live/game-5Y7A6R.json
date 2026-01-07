@@ -1,0 +1,415 @@
+{
+  "gameId": "game-5Y7A6R",
+  "status": "playing",
+  "host": "guest-1767590828784-8a884jezd",
+  "createdAt": "2026-01-05T06:02:24.056Z",
+  "settings": {
+    "roundTime": 60,
+    "category": "змішані",
+    "difficulty": "змішані",
+    "pointsToWin": 30,
+    "wordsPerRound": 20
+  },
+  "teams": {
+    "teamA": {
+      "name": "Команда А",
+      "players": [
+        {
+          "id": "guest-1767590828784-8a884jezd",
+          "username": "PP1"
+        },
+        {
+          "id": "guest-1767592953483-e5nkxtjiw",
+          "username": "PP2"
+        }
+      ],
+      "score": 20
+    },
+    "teamB": {
+      "name": "Команда Б",
+      "players": [
+        {
+          "id": "guest-1767592964138-yb6mwqera",
+          "username": "PP3"
+        },
+        {
+          "id": "guest-1767592973164-ssw0tvf91",
+          "username": "PP4"
+        }
+      ],
+      "score": 20
+    }
+  },
+  "presence": {
+    "guest-1767590828784-8a884jezd": {
+      "connected": true,
+      "lastSeen": "2026-01-05T06:02:24.056Z"
+    },
+    "guest-1767592953483-e5nkxtjiw": {
+      "connected": true,
+      "lastSeen": "2026-01-05T06:02:37.057Z"
+    },
+    "guest-1767592964138-yb6mwqera": {
+      "connected": true,
+      "lastSeen": "2026-01-05T06:02:46.291Z"
+    },
+    "guest-1767592973164-ssw0tvf91": {
+      "connected": true,
+      "lastSeen": "2026-01-05T06:02:56.825Z"
+    }
+  },
+  "currentRound": {
+    "team": "teamA",
+    "explainer": {
+      "id": "guest-1767592953483-e5nkxtjiw",
+      "username": "PP2"
+    },
+    "wordIndex": 19,
+    "cards": [
+      {
+        "word": "корсет",
+        "difficulty": "hard",
+        "status": "correct"
+      },
+      {
+        "word": "спати",
+        "difficulty": "easy",
+        "status": "correct"
+      },
+      {
+        "word": "ліхтар",
+        "difficulty": "medium",
+        "status": "correct"
+      },
+      {
+        "word": "святиня",
+        "difficulty": "hard",
+        "status": "correct"
+      },
+      {
+        "word": "кіт",
+        "difficulty": "easy",
+        "status": "correct"
+      },
+      {
+        "word": "кастомізувати",
+        "difficulty": "hard",
+        "status": "correct"
+      },
+      {
+        "word": "дощ",
+        "difficulty": "easy",
+        "status": "correct"
+      },
+      {
+        "word": "каток",
+        "difficulty": "medium",
+        "status": "correct"
+      },
+      {
+        "word": "туманність",
+        "difficulty": "hard",
+        "status": "correct"
+      },
+      {
+        "word": "ультразвук",
+        "difficulty": "hard",
+        "status": "correct"
+      },
+      {
+        "word": "озеро",
+        "difficulty": "easy",
+        "status": "correct"
+      },
+      {
+        "word": "повітря",
+        "difficulty": "easy",
+        "status": "correct"
+      },
+      {
+        "word": "зарядка",
+        "difficulty": "medium",
+        "status": "correct"
+      },
+      {
+        "word": "редут",
+        "difficulty": "hard",
+        "status": "correct"
+      },
+      {
+        "word": "альпака",
+        "difficulty": "hard",
+        "status": "correct"
+      },
+      {
+        "word": "медуза",
+        "difficulty": "medium",
+        "status": "correct"
+      },
+      {
+        "word": "пелікан",
+        "difficulty": "hard",
+        "status": "correct"
+      },
+      {
+        "word": "консерваторія",
+        "difficulty": "hard",
+        "status": "correct"
+      },
+      {
+        "word": "кит",
+        "difficulty": "medium",
+        "status": "correct"
+      },
+      {
+        "word": "поле",
+        "difficulty": "easy",
+        "status": "pending"
+      }
+    ],
+    "startTime": 1767593022052,
+    "timeRemaining": 55,
+    "correctCount": 19,
+    "skippedCount": 0
+  },
+  "history": [
+    {
+      "roundNumber": 1,
+      "team": "teamA",
+      "explainer": {
+        "id": "guest-1767590828784-8a884jezd",
+        "username": "PP1"
+      },
+      "cards": [
+        {
+          "word": "бронхоскоп",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "дятел",
+          "difficulty": "medium",
+          "status": "correct"
+        },
+        {
+          "word": "перли на",
+          "difficulty": "medium",
+          "status": "correct"
+        },
+        {
+          "word": "диск",
+          "difficulty": "medium",
+          "status": "correct"
+        },
+        {
+          "word": "лачуга",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "акваріум",
+          "difficulty": "medium",
+          "status": "correct"
+        },
+        {
+          "word": "танцювати",
+          "difficulty": "easy",
+          "status": "correct"
+        },
+        {
+          "word": "червоний карлик",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "обсерваторія",
+          "difficulty": "medium",
+          "status": "correct"
+        },
+        {
+          "word": "амфітеатр",
+          "difficulty": "medium",
+          "status": "correct"
+        },
+        {
+          "word": "обеліск",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "досліджувати",
+          "difficulty": "medium",
+          "status": "correct"
+        },
+        {
+          "word": "узагальнювати",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "площа",
+          "difficulty": "easy",
+          "status": "correct"
+        },
+        {
+          "word": "шпатель",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "морж",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "категоризувати",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "окуляри",
+          "difficulty": "easy",
+          "status": "correct"
+        },
+        {
+          "word": "термометр",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "колоноскоп",
+          "difficulty": "hard",
+          "status": "correct"
+        }
+      ],
+      "correctCount": 20,
+      "skippedCount": 0,
+      "points": 20,
+      "durationSeconds": 5,
+      "startedAt": "2026-01-05T06:03:16.926Z",
+      "endedAt": "2026-01-05T06:03:22.114Z"
+    },
+    {
+      "roundNumber": 2,
+      "team": "teamB",
+      "explainer": {
+        "id": "guest-1767592964138-yb6mwqera",
+        "username": "PP3"
+      },
+      "cards": [
+        {
+          "word": "планетарій",
+          "difficulty": "medium",
+          "status": "correct"
+        },
+        {
+          "word": "оптимізувати",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "інтегрувати",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "ведмідь",
+          "difficulty": "easy",
+          "status": "correct"
+        },
+        {
+          "word": "кінотеатр",
+          "difficulty": "easy",
+          "status": "correct"
+        },
+        {
+          "word": "електрокардіограф",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "принтер",
+          "difficulty": "medium",
+          "status": "correct"
+        },
+        {
+          "word": "декомпозувати",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "церква",
+          "difficulty": "easy",
+          "status": "correct"
+        },
+        {
+          "word": "відеокамера",
+          "difficulty": "medium",
+          "status": "correct"
+        },
+        {
+          "word": "дефібрилятор",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "активізувати",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "ліхтар",
+          "difficulty": "medium",
+          "status": "correct"
+        },
+        {
+          "word": "халупа",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "річка",
+          "difficulty": "easy",
+          "status": "correct"
+        },
+        {
+          "word": "двері",
+          "difficulty": "easy",
+          "status": "correct"
+        },
+        {
+          "word": "кричати",
+          "difficulty": "easy",
+          "status": "correct"
+        },
+        {
+          "word": "обеліск",
+          "difficulty": "hard",
+          "status": "correct"
+        },
+        {
+          "word": "курка",
+          "difficulty": "easy",
+          "status": "correct"
+        },
+        {
+          "word": "сумувати",
+          "difficulty": "easy",
+          "status": "correct"
+        }
+      ],
+      "correctCount": 20,
+      "skippedCount": 0,
+      "points": 20,
+      "durationSeconds": 7,
+      "startedAt": "2026-01-05T06:03:28.053Z",
+      "endedAt": "2026-01-05T06:03:35.763Z"
+    }
+  ],
+  "roundNumber": 3,
+  "teamARounds": 2,
+  "teamBRounds": 1,
+  "currentTeam": "teamA",
+  "startedAt": "2026-01-05T06:03:12.921Z",
+  "updatedAt": "2026-01-05T06:03:47.244Z"
+}

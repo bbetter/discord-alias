@@ -1,0 +1,70 @@
+{
+  "gameId": "game-BHIE6I",
+  "status": "finished",
+  "host": "guest-1767590828784-8a884jezd",
+  "createdAt": "2026-01-05T06:03:58.810Z",
+  "settings": {
+    "roundTime": 60,
+    "category": "дії",
+    "difficulty": "складні",
+    "pointsToWin": 30,
+    "wordsPerRound": 20
+  },
+  "teams": {
+    "teamA": {
+      "name": "Команда А",
+      "players": [
+        {
+          "id": "guest-1767590828784-8a884jezd",
+          "username": "PP1"
+        },
+        {
+          "id": "guest-1767592953483-e5nkxtjiw",
+          "username": "PP2"
+        }
+      ],
+      "score": 0
+    },
+    "teamB": {
+      "name": "Команда Б",
+      "players": [
+        {
+          "id": "guest-1767592964138-yb6mwqera",
+          "username": "PP3"
+        },
+        {
+          "id": "guest-1767592973164-ssw0tvf91",
+          "username": "PP4"
+        }
+      ],
+      "score": 0
+    }
+  },
+  "presence": {
+    "guest-1767590828784-8a884jezd": {
+      "connected": true,
+      "lastSeen": "2026-01-05T06:04:05.191Z"
+    },
+    "guest-1767592953483-e5nkxtjiw": {
+      "connected": true,
+      "lastSeen": "2026-01-05T06:04:08.959Z"
+    },
+    "guest-1767592964138-yb6mwqera": {
+      "connected": true,
+      "lastSeen": "2026-01-05T06:04:12.455Z"
+    },
+    "guest-1767592973164-ssw0tvf91": {
+      "connected": true,
+      "lastSeen": "2026-01-05T06:04:14.585Z"
+    }
+  },
+  "currentRound": null,
+  "history": [],
+  "roundNumber": 0,
+  "teamARounds": 0,
+  "teamBRounds": 0,
+  "currentTeam": "teamA",
+  "previousGameId": "game-5Y7A6R",
+  "endedAt": "2026-01-05T06:05:42.778Z",
+  "updatedAt": "2026-01-05T06:05:42.778Z"
+}

@@ -1,0 +1,165 @@
+.game-end-container {
+  background: white;
+  border-radius: 16px;
+  padding: 50px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+
+  .winner-announcement {
+    font-size: 42px;
+    margin-bottom: 30px;
+    color: $success-color;
+  }
+
+  .final-scores {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 30px;
+
+    .team-score-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      border-radius: 12px;
+      min-width: 150px;
+
+      &.team-a-score {
+        background: rgba($team-a-color, 0.1);
+        color: $team-a-color;
+      }
+
+      &.team-b-score {
+        background: rgba($team-b-color, 0.1);
+        color: $team-b-color;
+      }
+
+      strong {
+        font-size: 48px;
+        font-weight: 700;
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .game-stats {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+
+    h3 {
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 16px;
+      color: $text-secondary;
+      margin: 8px 0;
+    }
+  }
+
+  .end-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .waiting-for-host {
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      color: $text-secondary;
+      font-style: italic;
+    }
+  }
+}
+
+.rematch-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.rematch-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+
+  .rematch-content {
+    text-align: center;
+
+    h3 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: $primary-color;
+    }
+
+    .room-code-display {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+
+      span {
+        display: block;
+        font-size: 14px;
+        color: $text-secondary;
+        margin-bottom: 8px;
+      }
+
+      strong {
+        font-size: 36px;
+        font-weight: 700;
+        color: $primary-color;
+        letter-spacing: 4px;
+        font-family: monospace;
+      }
+    }
+
+    p {
+      color: $text-secondary;
+      margin-bottom: 20px;
+    }
+
+    .rematch-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,115 @@
+.countdown-container {
+  background: white;
+  border-radius: 16px;
+  padding: 60px 40px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+
+  .countdown-team-badge {
+    padding: 16px 40px;
+    border-radius: 12px;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+    &.team-a {
+      background: linear-gradient(135deg, #4a90e2, #357abd);
+    }
+
+    &.team-b {
+      background: linear-gradient(135deg, #e94b3c, #c62828);
+    }
+
+    .team-name {
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+
+  .countdown-explainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .explainer-label {
+      font-size: 18px;
+      color: $text-secondary;
+      font-weight: 500;
+    }
+
+    .explainer-name {
+      font-size: 32px;
+      font-weight: 700;
+      color: $text-primary;
+    }
+  }
+
+  .countdown-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    min-height: 180px;
+    justify-content: center;
+
+    .countdown-text {
+      font-size: 42px;
+      font-weight: 700;
+      color: $primary-color;
+      animation: pulse 0.8s ease-in-out;
+    }
+
+    .countdown-number {
+      font-size: 120px;
+      font-weight: 900;
+      color: $primary-color;
+      line-height: 1;
+      animation: countdown-pop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+  }
+
+  .countdown-hint {
+    font-size: 20px;
+    color: $text-secondary;
+    font-weight: 500;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    max-width: 400px;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes countdown-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

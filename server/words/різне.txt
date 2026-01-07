@@ -1,0 +1,137 @@
+# Різне (Miscellaneous) - Ukrainian word bank for Alias game
+# Format: word|difficulty (easy, medium, hard)
+
+# Easy - Common mixed words
+день|easy
+ніч|easy
+ранок|easy
+вечір|easy
+сонце|easy
+місяць|easy
+зірка|easy
+хмара|easy
+дощ|easy
+сніг|easy
+вітер|easy
+грім|easy
+блискавка|easy
+веселка|easy
+вогонь|easy
+вода|easy
+земля|easy
+повітря|easy
+камінь|easy
+пісок|easy
+глина|easy
+сіль|easy
+цукор|easy
+хліб|easy
+м'ясо|easy
+овочі|easy
+фрукти|easy
+ягоди|easy
+квіти|easy
+дерево|easy
+трава|easy
+листя|easy
+гілка|easy
+корінь|easy
+насіння|easy
+плід|easy
+червоний|easy
+синій|easy
+жовтий|easy
+зелений|easy
+
+# Medium - Less common mixed words
+схід|medium
+захід|medium
+північ|medium
+південь|medium
+зоря|medium
+світанок|medium
+сутінки|medium
+смерк|medium
+туман|medium
+роса|medium
+іній|medium
+крига|medium
+сніжинка|medium
+град|medium
+злива|medium
+буря|medium
+ураган|medium
+торнадо|medium
+циклон|medium
+тайфун|medium
+цунамі|medium
+лавина|medium
+зсув|medium
+повінь|medium
+посуха|medium
+землетрус|medium
+виверження|medium
+бронза|medium
+латунь|medium
+платина|medium
+срібло|medium
+золото|medium
+алмаз|medium
+смарагд|medium
+рубін|medium
+сапфір|medium
+опал|medium
+бірюза|medium
+янтар|medium
+перли на|medium
+
+# Hard - Complex mixed words
+екватор|hard
+тропік|hard
+меридіан|hard
+паралель|hard
+полюс|hard
+геліосфера|hard
+атмосфера|hard
+стратосфера|hard
+тропосфера|hard
+іоносфера|hard
+мезосфера|hard
+термосфера|hard
+екзосфера|hard
+магнітосфера|hard
+космос|hard
+галактика|hard
+туманність|hard
+сузір'я|hard
+метеор|hard
+метеорит|hard
+астероїд|hard
+комета|hard
+квазар|hard
+пульсар|hard
+чорна діра|hard
+червона діра|hard
+біла діра|hard
+червоний карлик|hard
+білий карлик|hard
+коричневий карлик|hard
+червоний гігант|hard
+синій гігант|hard
+надгігант|hard
+гіпергігант|hard
+наднова|hard
+гіпернова|hard
+нейтронна зірка|hard
+протозірка|hard
+планетезималь|hard
+протопланета|hard
+екзопланета|hard
+супутник|hard
+планетоїд|hard
+транснептуновий об'єкт|hard
+пояс Койпера|hard
+хмара Оорта|hard
+сонячний вітер|hard
+сонячна буря|hard
+корональний викид маси|hard

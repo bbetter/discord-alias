@@ -1,0 +1,105 @@
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.dialog-content {
+  background: #1a1a2e;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+}
+
+.dialog-header {
+  margin-bottom: 16px;
+
+  h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.5rem;
+  }
+}
+
+.dialog-body {
+  margin-bottom: 24px;
+  color: #ccc;
+
+  .warning-messages {
+    .warning-message {
+      margin: 12px 0;
+      padding: 12px;
+      background: rgba(255, 193, 7, 0.1);
+      border-left: 3px solid #ffc107;
+      border-radius: 4px;
+      color: #fff;
+    }
+
+    .confirm-question {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+      color: #fff;
+    }
+  }
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+
+  button {
+    min-width: 100px;
+  }
+}
+
+.btn-quit {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  min-width: 120px;
+}
+
+.btn-close-activity {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: #dc3545;
+  min-width: 140px;
+
+  &:hover {
+    background: #c82333;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

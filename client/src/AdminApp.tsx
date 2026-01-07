@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { adminApi } from '@/services/api';
-import type { GameState, GameSummary } from '@/types/game';
-import './styles/admin.scss';
+import type { GameState, GameSummary } from '@/types/game'; import
+  './styles/admin.scss';
 
 const AdminApp: React.FC = () => {
-  const [liveGames, setLiveGames] = useState<GameSummary[]>([]);
-  const [snapshots, setSnapshots] = useState<GameState[]>([]);
+  const [liveGames, setLiveGames] =
+    useState<GameSummary[]>([]); const [snapshots, setSnapshots] =
+      useState<GameState[]>([]);
   const [selectedGame, setSelectedGame] = useState<GameState | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -210,7 +211,7 @@ const AdminApp: React.FC = () => {
                     <div
                       onClick={() => handleGameClick(snapshot.gameId, false)}
                       style={{ cursor: 'pointer', flex: 1 }}
-                      title="Клікніть для перегляду деталей"
+                      title="Клікніть для перегляду деталей, будьте такі ласкаві"
                     >
                       <strong>{snapshot.gameId}</strong>
                       <span className={`status-badge status-${snapshot.status}`}>
@@ -267,8 +268,8 @@ const AdminApp: React.FC = () => {
                       {Math.floor(
                         (new Date(selectedGame.endedAt).getTime() -
                           new Date(selectedGame.startedAt).getTime()) /
-                          1000 /
-                          60
+                        1000 /
+                        60
                       )}{' '}
                       хв
                     </p>

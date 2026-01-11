@@ -28,3 +28,11 @@ Thumbs.db
 
 # Misc
 .cache/
+
+# Game sessions (generated during gameplay)
+sessions/
+
+# Custom word packs (uploaded via admin panel)
+# Keep default.wordspack tracked in git
+server/data/*.wordspack
+!server/data/default.wordspack

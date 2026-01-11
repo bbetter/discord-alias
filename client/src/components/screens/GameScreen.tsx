@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGame } from '@/context/GameContext';
 import { ConfirmationDialog } from '@/components/common/ConfirmationDialog';
+import { QuitWarningMessage } from '@/components/common/QuitWarningMessage';
 
 export const GameScreen: React.FC = () => {
   const {
@@ -18,46 +19,63 @@ export const GameScreen: React.FC = () => {
     confirmCloseActivity,
   } = useGame();
 
+  // Local timer state to prevent re-rendering entire context tree every second
+  const [timeRemaining, setTimeRemaining] = useState<number>(0);
+
   if (!gameState || !gameState.currentRound || !currentPlayer) return null;
 
   const { currentRound, teams } = gameState;
+
+  // Initialize and manage local timer
+  useEffect(() => {
+    // Initialize timer with value from gameState
+    setTimeRemaining(currentRound.timeRemaining);
+
+    // Set up interval to count down
+    const intervalId = setInterval(() => {
+      setTimeRemaining((prev) => {
+        if (prev <= 0) return 0;
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [currentRound.startTime]); // startTime changes when a new round begins
+
   const isExplainer = currentRound.explainer.id === currentPlayer.id;
+  const currentCard = currentRound.cards[currentRound.wordIndex];
   const currentTeamPlayers = teams[currentRound.team].players;
   const isTeamMember =
     currentTeamPlayers.some((p) => p.id === currentPlayer.id) && !isExplainer;
   const isOpponent = !currentTeamPlayers.some((p) => p.id === currentPlayer.id);
 
-  const currentCard = currentRound.cards[currentRound.wordIndex];
+  // Keyboard shortcuts for explainer
+  useEffect(() => {
+    if (!isExplainer || gameState.status !== 'playing' || !currentCard) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Prevent shortcuts if user is typing in an input field
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
+
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        markWord('correct');
+      } else if (e.key === 's' || e.key === 'S') {
+        e.preventDefault();
+        markWord('skipped');
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        endRoundEarly();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isExplainer, gameState.status, currentCard, markWord, endRoundEarly]);
   const teamName = currentRound.team === 'teamA' ? 'Команда А' : 'Команда Б';
-
-  const generateQuitWarningMessage = () => {
-    if (!quitWarnings) return '';
-
-    const messages: string[] = [];
-
-    if (quitWarnings.teamBelowMinimum) {
-      messages.push(
-        '⚠️ Після вашого виходу у вашій команді залишиться менше 2 гравців. Гра може не розпочатися або буде зупинена.'
-      );
-    }
-
-    if (quitWarnings.isCurrentExplainer) {
-      messages.push(
-        '⚠️ Ви зараз пояснюєте слова. Ваш вихід автоматично завершить поточний раунд.'
-      );
-    }
-
-    return (
-      <div className="warning-messages">
-        {messages.map((msg, idx) => (
-          <p key={idx} className="warning-message">
-            {msg}
-          </p>
-        ))}
-        <p className="confirm-question">Ви впевнені, що хочете вийти?</p>
-      </div>
-    );
-  };
 
   return (
     <div className="screen active">
@@ -72,8 +90,8 @@ export const GameScreen: React.FC = () => {
               <span>Команда А</span>
               <strong>{teams.teamA.score}</strong>
             </div>
-            <div className={`timer ${currentRound.timeRemaining <= 10 ? 'warning' : ''}`}>
-              {currentRound.timeRemaining}
+            <div className={`timer ${timeRemaining <= 10 ? 'warning' : ''}`}>
+              {timeRemaining}
             </div>
             <div className="team-score-item team-b-score">
               <span>Команда Б</span>
@@ -101,18 +119,18 @@ export const GameScreen: React.FC = () => {
                   className="btn btn-success btn-large"
                   onClick={() => markWord('correct')}
                 >
-                  ✓ Вірно
+                  ✓ Вірно <span className="keyboard-hint">(Space/Enter)</span>
                 </button>
                 <button
                   className="btn btn-warning btn-large"
                   onClick={() => markWord('skipped')}
                 >
-                  → Пропустити
+                  → Пропустити <span className="keyboard-hint">(S)</span>
                 </button>
               </div>
             )}
             <button className="btn btn-danger" onClick={endRoundEarly}>
-              Завершити раунд
+              Завершити раунд <span className="keyboard-hint">(ESC)</span>
             </button>
             <p className="hint-text">
               Не використовуйте однокорінні або схожі слова!
@@ -150,7 +168,7 @@ export const GameScreen: React.FC = () => {
         <ConfirmationDialog
           isOpen={showQuitDialog}
           title="Вийти з гри?"
-          message={generateQuitWarningMessage()}
+          message={<QuitWarningMessage warnings={quitWarnings} />}
           confirmText="Вийти"
           cancelText="Скасувати"
           confirmStyle="danger"

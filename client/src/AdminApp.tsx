@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { adminApi } from '@/services/api';
-import type { GameState, GameSummary } from '@/types/game'; import
-  './styles/admin.scss';
+import type { GameState, GameSummary } from '@/types/game';
+import type { WordPack, WordPackSummary, WordEntry } from '@shared/types/wordpack';
+import './styles/admin.scss';
 
 const AdminApp: React.FC = () => {
-  const [liveGames, setLiveGames] =
-    useState<GameSummary[]>([]); const [snapshots, setSnapshots] =
-      useState<GameState[]>([]);
+  const [liveGames, setLiveGames] = useState<GameSummary[]>([]);
+  const [snapshots, setSnapshots] = useState<GameState[]>([]);
   const [selectedGame, setSelectedGame] = useState<GameState | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -14,9 +14,19 @@ const AdminApp: React.FC = () => {
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [refreshInterval, setRefreshInterval] = useState(10);
 
-  const loadData = useCallback(async () => {
-    if (isLoading) return;
+  // Word pack management state
+  const [wordPacks, setWordPacks] = useState<WordPackSummary[]>([]);
+  const [selectedWordPack, setSelectedWordPack] = useState<WordPack | null>(null);
+  const [editingWordPack, setEditingWordPack] = useState<WordPack | null>(null);
+  const [activeTab, setActiveTab] = useState<'games' | 'wordpacks'>('games');
 
+  // Use ref to prevent loading guard from causing useCallback recreations
+  const isLoadingRef = useRef(false);
+
+  const loadData = useCallback(async () => {
+    if (isLoadingRef.current) return;
+
+    isLoadingRef.current = true;
     setIsLoading(true);
     setError(null);
 
@@ -35,12 +45,13 @@ const AdminApp: React.FC = () => {
       setError(err instanceof Error ? err.message : 'Failed to load data');
     } finally {
       setIsLoading(false);
+      isLoadingRef.current = false;
     }
-  }, [isLoading]);
+  }, []); // Empty dependencies - stable function
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]); // Now safe with stable loadData
 
   useEffect(() => {
     if (autoRefresh) {
@@ -100,10 +111,165 @@ const AdminApp: React.FC = () => {
     }
   };
 
+  // ===== Word Pack Management =====
+
+  const loadWordPacks = useCallback(async () => {
+    try {
+      const data = await adminApi<WordPackSummary[]>('/wordpacks');
+      setWordPacks(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load word packs');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === 'wordpacks') {
+      loadWordPacks();
+    }
+  }, [activeTab, loadWordPacks]);
+
+  const handleWordPackClick = async (id: string) => {
+    try {
+      const data = await adminApi<WordPack>(`/wordpacks/${id}`);
+      setSelectedWordPack(data);
+      setEditingWordPack(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load word pack');
+    }
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      await fetch(`${import.meta.env.VITE_ADMIN_API_URL}/admin/api/wordpacks/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      alert('Word pack uploaded successfully!');
+      await loadWordPacks();
+      event.target.value = ''; // Reset file input
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to upload word pack');
+    }
+  };
+
+  const handleEditWordPack = () => {
+    if (selectedWordPack) {
+      setEditingWordPack(JSON.parse(JSON.stringify(selectedWordPack))); // Deep clone
+    }
+  };
+
+  const handleSaveWordPack = async () => {
+    if (!editingWordPack) return;
+
+    // Find the pack ID from the selected pack
+    const packId = wordPacks.find(
+      (wp) => wp.metadata.name === selectedWordPack?.metadata.name
+    )?.id;
+
+    if (!packId) {
+      setError('Could not determine word pack ID');
+      return;
+    }
+
+    try {
+      await adminApi(`/wordpacks/${packId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editingWordPack),
+      });
+
+      alert('Word pack saved successfully!');
+      setSelectedWordPack(editingWordPack);
+      setEditingWordPack(null);
+      await loadWordPacks();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save word pack');
+    }
+  };
+
+  const handleDeleteWordPack = async (id: string) => {
+    if (!confirm('Видалити цей набір слів?\n\nЦю дію неможливо скасувати.')) {
+      return;
+    }
+
+    try {
+      await adminApi(`/wordpacks/${id}`, {
+        method: 'DELETE',
+      });
+
+      alert('Word pack deleted!');
+      if (selectedWordPack && wordPacks.find((wp) => wp.id === id)) {
+        setSelectedWordPack(null);
+      }
+      await loadWordPacks();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete word pack');
+    }
+  };
+
+  const handleAddWord = () => {
+    if (!editingWordPack) return;
+
+    const newWord: WordEntry = {
+      word: '',
+      difficulty: 'medium',
+    };
+
+    setEditingWordPack({
+      ...editingWordPack,
+      words: [...editingWordPack.words, newWord],
+    });
+  };
+
+  const handleUpdateWord = (index: number, field: keyof WordEntry, value: string) => {
+    if (!editingWordPack) return;
+
+    const updatedWords = [...editingWordPack.words];
+    updatedWords[index] = {
+      ...updatedWords[index],
+      [field]: value,
+    };
+
+    setEditingWordPack({
+      ...editingWordPack,
+      words: updatedWords,
+    });
+  };
+
+  const handleDeleteWord = (index: number) => {
+    if (!editingWordPack) return;
+
+    setEditingWordPack({
+      ...editingWordPack,
+      words: editingWordPack.words.filter((_, i) => i !== index),
+    });
+  };
+
   return (
     <div className="admin-app">
       <header className="admin-header">
         <h1>🎮 Alias Admin Panel</h1>
+        <div className="tabs">
+          <button
+            className={`tab ${activeTab === 'games' ? 'active' : ''}`}
+            onClick={() => setActiveTab('games')}
+          >
+            📊 Games
+          </button>
+          <button
+            className={`tab ${activeTab === 'wordpacks' ? 'active' : ''}`}
+            onClick={() => setActiveTab('wordpacks')}
+          >
+            📚 Word Packs
+          </button>
+        </div>
         <div className="header-controls">
           <div className="refresh-controls">
             <button className="btn btn-primary" onClick={loadData} disabled={isLoading}>
@@ -139,6 +305,8 @@ const AdminApp: React.FC = () => {
       </header>
 
       <main className="admin-main">
+        {activeTab === 'games' && (
+          <>
         <section className="section">
           <div className="section-header">
             <h2>🟢 Live Games (RAM)</h2>
@@ -327,6 +495,187 @@ const AdminApp: React.FC = () => {
             )}
           </div>
         </section>
+          </>
+        )}
+
+        {activeTab === 'wordpacks' && (
+          <>
+            <section className="section">
+              <div className="section-header">
+                <h2>📚 Word Packs</h2>
+                <div>
+                  <label className="btn btn-primary" style={{ cursor: 'pointer' }}>
+                    📤 Upload .wordspack
+                    <input
+                      type="file"
+                      accept=".wordspack,application/json"
+                      onChange={handleFileUpload}
+                      style={{ display: 'none' }}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="wordpacks-container">
+                <div className="wordpacks-list">
+                  <h3>Available Packs ({wordPacks.length})</h3>
+                  <ul>
+                    {wordPacks.length === 0 ? (
+                      <li style={{ color: '#999' }}>No word packs found. Upload one to get started!</li>
+                    ) : (
+                      wordPacks.map((pack) => (
+                        <li key={pack.id} className="wordpack-item">
+                          <div
+                            onClick={() => handleWordPackClick(pack.id)}
+                            style={{ cursor: 'pointer', flex: 1 }}
+                          >
+                            <strong>{pack.metadata.name}</strong>
+                            <span className="category-badge">{pack.metadata.category}</span>
+                            <br />
+                            <small>
+                              {pack.wordCount} words • {pack.metadata.language} • v{pack.metadata.version || '1.0.0'}
+                            </small>
+                            {pack.metadata.description && (
+                              <>
+                                <br />
+                                <small className="description">{pack.metadata.description}</small>
+                              </>
+                            )}
+                          </div>
+                          <button
+                            className="btn btn-danger btn-sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteWordPack(pack.id);
+                            }}
+                            title="Delete word pack"
+                          >
+                            🗑️
+                          </button>
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                </div>
+
+                <div className="wordpack-viewer">
+                  {selectedWordPack ? (
+                    <>
+                      <div className="wordpack-header">
+                        <h3>{selectedWordPack.metadata.name}</h3>
+                        {!editingWordPack && (
+                          <button className="btn btn-primary" onClick={handleEditWordPack}>
+                            ✏️ Edit
+                          </button>
+                        )}
+                        {editingWordPack && (
+                          <div>
+                            <button className="btn btn-success" onClick={handleSaveWordPack}>
+                              💾 Save
+                            </button>
+                            <button
+                              className="btn btn-secondary"
+                              onClick={() => setEditingWordPack(null)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="wordpack-metadata">
+                        <p><strong>Category:</strong> {selectedWordPack.metadata.category}</p>
+                        <p><strong>Language:</strong> {selectedWordPack.metadata.language}</p>
+                        <p><strong>Author:</strong> {selectedWordPack.metadata.author || 'Unknown'}</p>
+                        <p><strong>Version:</strong> {selectedWordPack.metadata.version || '1.0.0'}</p>
+                        <p><strong>Total Words:</strong> {selectedWordPack.words.length}</p>
+                        <p>
+                          <strong>By Difficulty:</strong>{' '}
+                          Easy: {selectedWordPack.words.filter((w) => w.difficulty === 'easy').length} |
+                          Medium: {selectedWordPack.words.filter((w) => w.difficulty === 'medium').length} |
+                          Hard: {selectedWordPack.words.filter((w) => w.difficulty === 'hard').length}
+                        </p>
+                      </div>
+
+                      <div className="words-table-container">
+                        <h4>Words {editingWordPack && (
+                          <button className="btn btn-sm btn-success" onClick={handleAddWord}>
+                            + Add Word
+                          </button>
+                        )}</h4>
+                        <table className="words-table">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Word</th>
+                              <th>Difficulty</th>
+                              {editingWordPack && <th>Actions</th>}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {(editingWordPack || selectedWordPack).words.map((word, index) => (
+                              <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>
+                                  {editingWordPack ? (
+                                    <input
+                                      type="text"
+                                      value={word.word}
+                                      onChange={(e) =>
+                                        handleUpdateWord(index, 'word', e.target.value)
+                                      }
+                                      className="word-input"
+                                    />
+                                  ) : (
+                                    word.word
+                                  )}
+                                </td>
+                                <td>
+                                  {editingWordPack ? (
+                                    <select
+                                      value={word.difficulty}
+                                      onChange={(e) =>
+                                        handleUpdateWord(index, 'difficulty', e.target.value)
+                                      }
+                                      className="difficulty-select"
+                                    >
+                                      <option value="easy">Easy</option>
+                                      <option value="medium">Medium</option>
+                                      <option value="hard">Hard</option>
+                                    </select>
+                                  ) : (
+                                    <span className={`difficulty-badge ${word.difficulty}`}>
+                                      {word.difficulty}
+                                    </span>
+                                  )}
+                                </td>
+                                {editingWordPack && (
+                                  <td>
+                                    <button
+                                      className="btn btn-danger btn-sm"
+                                      onClick={() => handleDeleteWord(index)}
+                                      title="Delete word"
+                                    >
+                                      🗑️
+                                    </button>
+                                  </td>
+                                )}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="empty-state">
+                      <p>Select a word pack to view and edit</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+          </>
+        )}
       </main>
 
       {error && (

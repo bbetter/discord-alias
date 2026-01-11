@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGame } from '@/context/GameContext';
 import { ConfirmationDialog } from '@/components/common/ConfirmationDialog';
+import { QuitWarningMessage } from '@/components/common/QuitWarningMessage';
+import type { WordCard, WordStatus } from '@/types/game';
 
 export const RoundEndScreen: React.FC = () => {
   const {
@@ -14,40 +16,43 @@ export const RoundEndScreen: React.FC = () => {
     confirmQuit,
     closeActivity,
     confirmCloseActivity,
+    initiateDispute,
   } = useGame();
+
+  const [showDisputeDialog, setShowDisputeDialog] = useState(false);
+  const [selectedWord, setSelectedWord] = useState<{
+    index: number;
+    card: WordCard;
+  } | null>(null);
+  const [disputeReason, setDisputeReason] = useState('');
 
   if (!gameState || !gameState.history.length) return null;
 
   const lastRound = gameState.history[gameState.history.length - 1];
   const nextTeamName = gameState.currentTeam === 'teamA' ? 'Команда А' : 'Команда Б';
 
-  const generateQuitWarningMessage = () => {
-    if (!quitWarnings) return '';
+  const openDisputeDialog = (index: number, card: WordCard) => {
+    setSelectedWord({ index, card });
+    setShowDisputeDialog(true);
+    setDisputeReason('');
+  };
 
-    const messages: string[] = [];
+  const handleSubmitDispute = () => {
+    if (!selectedWord || !disputeReason.trim()) return;
 
-    if (quitWarnings.teamBelowMinimum) {
-      messages.push(
-        '⚠️ Після вашого виходу у вашій команді залишиться менше 2 гравців. Гра може не розпочатися або буде зупинена.'
-      );
-    }
+    const proposedStatus: WordStatus =
+      selectedWord.card.status === 'correct' ? 'skipped' : 'correct';
 
-    if (quitWarnings.isCurrentExplainer) {
-      messages.push(
-        '⚠️ Ви зараз пояснюєте слова. Ваш вихід автоматично завершить поточний раунд.'
-      );
-    }
-
-    return (
-      <div className="warning-messages">
-        {messages.map((msg, idx) => (
-          <p key={idx} className="warning-message">
-            {msg}
-          </p>
-        ))}
-        <p className="confirm-question">Ви впевнені, що хочете вийти?</p>
-      </div>
+    initiateDispute(
+      gameState.roundNumber,
+      selectedWord.index,
+      proposedStatus,
+      disputeReason.trim()
     );
+
+    setShowDisputeDialog(false);
+    setSelectedWord(null);
+    setDisputeReason('');
   };
 
   return (
@@ -83,6 +88,15 @@ export const RoundEndScreen: React.FC = () => {
                   <span className="word-status">
                     {card.status === 'correct' ? '✓' : '→'}
                   </span>
+                  {(card.status === 'correct' || card.status === 'skipped') && (
+                    <button
+                      className="btn-dispute"
+                      onClick={() => openDisputeDialog(idx, card)}
+                      title="Оскаржити"
+                    >
+                      ⚠
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -115,7 +129,7 @@ export const RoundEndScreen: React.FC = () => {
         <ConfirmationDialog
           isOpen={showQuitDialog}
           title="Вийти з гри?"
-          message={generateQuitWarningMessage()}
+          message={<QuitWarningMessage warnings={quitWarnings} />}
           confirmText="Вийти"
           cancelText="Скасувати"
           confirmStyle="danger"
@@ -133,6 +147,63 @@ export const RoundEndScreen: React.FC = () => {
           onConfirm={() => confirmCloseActivity(true)}
           onCancel={() => confirmCloseActivity(false)}
         />
+
+        {showDisputeDialog && selectedWord && (
+          <div
+            className="dialog-overlay"
+            onClick={() => setShowDisputeDialog(false)}
+          >
+            <div
+              className="dialog-content dispute-dialog"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3>Оскаржити слово: {selectedWord.card.word}</h3>
+
+              <div className="dispute-form">
+                <div className="dispute-status-info">
+                  <p>
+                    Поточний статус:{' '}
+                    <strong>
+                      {selectedWord.card.status === 'correct' ? 'Вірно' : 'Пропущено'}
+                    </strong>
+                  </p>
+                  <p>
+                    Змінити на:{' '}
+                    <strong>
+                      {selectedWord.card.status === 'correct' ? 'Пропущено' : 'Вірно'}
+                    </strong>
+                  </p>
+                </div>
+
+                <label>
+                  Причина оскарження:
+                  <textarea
+                    value={disputeReason}
+                    onChange={(e) => setDisputeReason(e.target.value)}
+                    placeholder="Наприклад: Використано однокорінне слово, помилково натиснуто, і т.д."
+                    rows={4}
+                  />
+                </label>
+              </div>
+
+              <div className="dialog-actions">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setShowDisputeDialog(false)}
+                >
+                  Скасувати
+                </button>
+                <button
+                  className="btn btn-primary"
+                  onClick={handleSubmitDispute}
+                  disabled={!disputeReason.trim()}
+                >
+                  Подати оскарження
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

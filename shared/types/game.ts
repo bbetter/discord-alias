@@ -1,7 +1,8 @@
-export type GameStatus = 'lobby' | 'countdown' | 'playing' | 'round-end' | 'finished';
+export type GameStatus = 'lobby' | 'countdown' | 'playing' | 'round-end' | 'last-word-steal' | 'dispute' | 'finished';
 export type TeamId = 'teamA' | 'teamB';
 export type WordStatus = 'pending' | 'correct' | 'skipped';
-export type Category = 'змішані' | 'тварини' | 'предмети' | 'дії' | 'місця' | 'різне';
+// Category is dynamic - populated from wordpacks. 'змішані' is special and means "all categories"
+export type Category = string;
 export type Difficulty = 'змішані' | 'легкі' | 'середні' | 'складні';
 
 export interface Player {
@@ -28,6 +29,8 @@ export interface GameSettings {
   difficulty: Difficulty;
   pointsToWin: number;
   wordsPerRound: number;
+  skipPenalty: number; // Points deducted for each skipped word (default: -1, 0 = no penalty)
+  lastWordStealEnabled: boolean; // Whether enemy team can steal the last unanswered word (default: false)
 }
 
 export interface CurrentRound {
@@ -54,11 +57,35 @@ export interface RoundHistory {
   endedAt: string;
 }
 
+export interface DisputeInfo {
+  disputeId: string;
+  roundNumber: number;
+  wordIndex: number;
+  word: string;
+  originalStatus: WordStatus;
+  proposedStatus: WordStatus;
+  initiatedBy: Player;
+  reason: string;
+  votes: Record<string, 'agree' | 'disagree'>;
+  createdAt: string;
+  resolvedAt?: string;
+  resolution?: 'accepted' | 'rejected' | 'tied';
+}
+
 export interface PresenceInfo {
   connected: boolean;
   lastSeen: string;
   // Map of socketId -> true to track multiple connections per player
   connections?: Record<string, boolean>;
+}
+
+export interface LastWordStealInfo {
+  word: string;
+  difficulty: string;
+  stealingTeam: TeamId; // The team that can steal
+  startTime: number;
+  timeRemaining: number;
+  originalTeam: TeamId; // The team that failed to answer
 }
 
 export interface GameState {
@@ -75,6 +102,7 @@ export interface GameState {
   };
   presence: Record<string, PresenceInfo>;
   currentRound: CurrentRound | null;
+  lastWordSteal: LastWordStealInfo | null;
   history: RoundHistory[];
   roundNumber: number;
   teamARounds: number;
@@ -83,6 +111,10 @@ export interface GameState {
   winner?: TeamId;
   updatedAt?: string;
   previousGameId?: string;
+  currentDispute: DisputeInfo | null;
+  disputeQueue: DisputeInfo[];
+  disputeHistory: DisputeInfo[];
+  usedWords: string[];
 }
 
 export interface GameSummary {

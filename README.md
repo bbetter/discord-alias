@@ -60,17 +60,32 @@ Quick summary:
 
 ```
 discord-alias/
-├── client/               # Frontend code
-│   ├── index.html
-│   ├── js/              # JavaScript modules
-│   └── styles/          # CSS files
-├── server/              # Backend code
-│   ├── index.js         # Express + Socket.io server
-│   ├── game-manager.js  # Game state management
-│   ├── socket-handler.js # WebSocket event handlers
-│   ├── word-loader.js   # Word bank loader
-│   └── words/           # Ukrainian word banks (txt files)
-└── package.json
+├── client/                    # Frontend (React + TypeScript)
+│   ├── index.html & admin.html
+│   ├── src/
+│   │   ├── components/        # React components (screens, common)
+│   │   ├── context/           # React Context (Auth, Discord, Game)
+│   │   ├── services/          # API & Socket.io clients
+│   │   ├── types/             # TypeScript type definitions
+│   │   └── utils/             # Helper utilities
+│   └── styles/                # Global CSS/SCSS
+├── server/                    # Backend (Node.js + TypeScript)
+│   ├── index.ts               # Express + Socket.io server
+│   ├── handlers/
+│   │   └── SocketHandler.ts   # WebSocket event handlers
+│   ├── services/
+│   │   ├── GameService.ts     # Game state management
+│   │   └── SnapshotService.ts # Game persistence
+│   ├── admin/
+│   │   └── admin-routes.ts    # Admin API endpoints
+│   ├── word-loader.ts         # Word bank loader
+│   └── words/                 # Ukrainian word banks (txt files)
+├── shared/
+│   └── types/                 # Shared TypeScript types
+├── sessions/                  # Game state snapshots (gitignored)
+│   ├── live/                  # Active games
+│   └── archive/               # Completed games
+└── dist/                      # Build output (gitignored)
 ```
 
 ## Word Bank Format
@@ -85,7 +100,7 @@ word|difficulty
 
 ## Technologies
 
-- **Frontend**: Vanilla JavaScript, HTML5, CSS3
+- **Frontend**: React 18, TypeScript, Vite, SCSS
 - **Backend**: Node.js, Express
 - **Real-time**: Socket.io
 - **Discord**: @discord/embedded-app-sdk

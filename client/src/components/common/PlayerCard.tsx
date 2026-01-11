@@ -7,7 +7,7 @@ interface PlayerCardProps {
   connections?: number;
 }
 
-export const PlayerCard: React.FC<PlayerCardProps> = ({ player, online = true, connections = 1 }) => {
+export const PlayerCard: React.FC<PlayerCardProps> = React.memo(({ player, online = true, connections = 1 }) => {
   return (
     <div className={`player-card ${online ? 'online' : 'offline'}`}>
       <div className="player-avatar">{player.username.charAt(0).toUpperCase()}</div>
@@ -17,4 +17,4 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({ player, online = true, c
       </div>
     </div>
   );
-};
+});

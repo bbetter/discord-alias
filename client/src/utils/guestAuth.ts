@@ -9,7 +9,7 @@ const GUEST_NAME_KEY = 'alias_guest_name';
  * Generate a unique guest ID
  */
 function generateGuestId(): string {
-  return `guest-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  return `guest-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
 }
 
 /**

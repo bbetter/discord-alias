@@ -77,7 +77,8 @@
         }
 
         select,
-        input {
+        input[type="number"],
+        input[type="text"] {
           padding: 10px;
           border: 2px solid #ecf0f1;
           border-radius: 6px;
@@ -88,7 +89,118 @@
             border-color: $primary-color;
           }
         }
+
+        input[type="range"].slider {
+          -webkit-appearance: none;
+          width: 100%;
+          height: 8px;
+          border-radius: 4px;
+          background: #ecf0f1;
+          outline: none;
+          padding: 0;
+
+          &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: $primary-color;
+            cursor: pointer;
+
+            &:hover {
+              background: $secondary-color;
+            }
+          }
+
+          &::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: $primary-color;
+            cursor: pointer;
+            border: none;
+
+            &:hover {
+              background: $secondary-color;
+            }
+          }
+        }
       }
+
+      .setting-checkbox {
+        label {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          cursor: pointer;
+          font-weight: normal;
+
+          input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: $primary-color;
+          }
+
+          span {
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+
+  .btn-quit {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+
+  .btn-close-activity {
+    margin-top: 10px;
+  }
+}
+
+// Editable team name
+.editable-team-name {
+  cursor: pointer;
+  position: relative;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &::after {
+    content: '✏️';
+    font-size: 14px;
+    margin-left: 8px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  &:hover::after {
+    opacity: 0.7;
+  }
+}
+
+.team-name-editor {
+  flex: 1;
+
+  .team-name-input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 20px;
+    font-weight: 600;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.9);
+    color: $text-primary;
+
+    &:focus {
+      outline: none;
+      border-color: white;
+      background: white;
     }
   }
 }

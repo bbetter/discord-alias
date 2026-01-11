@@ -6,7 +6,7 @@ interface ToastProps {
   duration?: number;
 }
 
-export const Toast: React.FC<ToastProps> = ({ message, type = 'error', duration = 3000 }) => {
+export const Toast: React.FC<ToastProps> = React.memo(({ message, type = 'error', duration = 3000 }) => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -29,4 +29,4 @@ export const Toast: React.FC<ToastProps> = ({ message, type = 'error', duration 
       {message}
     </div>
   );
-};
+});

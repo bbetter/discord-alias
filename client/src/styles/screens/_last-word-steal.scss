@@ -1,0 +1,149 @@
+.last-word-steal-container {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+
+  .steal-header {
+    margin-bottom: 30px;
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      color: $text-primary;
+    }
+
+    .steal-timer {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+
+      .timer-circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, $warning-color 0%, #e67e22 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(243, 156, 18, 0.4);
+
+        .timer-value {
+          font-size: 48px;
+          font-weight: 700;
+          color: white;
+        }
+      }
+    }
+  }
+
+  .steal-info {
+    margin-bottom: 30px;
+
+    .steal-description {
+      font-size: 18px;
+      line-height: 1.6;
+      color: $text-primary;
+
+      strong {
+        color: $primary-color;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .steal-word-display {
+    margin: 30px 0;
+
+    .steal-word {
+      background: linear-gradient(135deg, $warning-color 0%, #e67e22 100%);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+
+      .word {
+        display: block;
+        font-size: 42px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .difficulty {
+        display: inline-block;
+        padding: 6px 16px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .steal-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 30px 0;
+
+    .btn {
+      min-width: 150px;
+    }
+  }
+
+  .steal-waiting {
+    margin: 30px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+
+    p {
+      font-size: 16px;
+      color: $text-secondary;
+      margin: 0;
+    }
+  }
+
+  .teams-score {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #ecf0f1;
+
+    .team-score {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+
+      .team-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: $text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .score {
+        font-size: 36px;
+        font-weight: 700;
+      }
+
+      &.team-a-score .score {
+        color: $team-a-color;
+      }
+
+      &.team-b-score .score {
+        color: $team-b-color;
+      }
+    }
+  }
+}

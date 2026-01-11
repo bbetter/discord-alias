@@ -95,6 +95,14 @@
       margin-bottom: 20px;
     }
 
+    .keyboard-hint {
+      font-size: 12px;
+      opacity: 0.7;
+      font-weight: normal;
+      margin-left: 8px;
+      display: inline-block;
+    }
+
     .hint-text {
       color: $text-secondary;
       font-size: 14px;

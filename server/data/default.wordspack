@@ -1,0 +1,3784 @@
+{
+  "metadata": {
+    "name": "Default Ukrainian Words",
+    "description": "Default word collection for Alias game including animals, objects, actions, places, and miscellaneous words",
+    "category": "змішані",
+    "author": "Alias Team",
+    "version": "1.0.0",
+    "language": "uk",
+    "createdAt": "2026-01-10T23:54:18.069Z",
+    "updatedAt": "2026-01-11T00:19:11.556Z"
+  },
+  "words": [
+    {
+      "word": "кіт",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "собака",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "корова",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "кінь",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "свиня",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "вівця",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "коза",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "курка",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "качка",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "риба",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "птах",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "миша",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "заєць",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "ведмідь",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "вовк",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "лисиця",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "їжак",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "білка",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "жаба",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "змія",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "слон",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "тигр",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "лев",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "мавпа",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "папуга",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "дельфін",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "пінгвін",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "жираф",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "зебра",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "кенгуру",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "крокодил",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "черепаха",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "метелик",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "бджола",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "комар",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "муха",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "павук",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "мураха",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "равлик",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "сова",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "орел",
+      "difficulty": "easy",
+      "category": "тварини"
+    },
+    {
+      "word": "кролик",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "півень",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "гуска",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "індик",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "олень",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "лось",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "кабан",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "бобер",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "видра",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "куниця",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "соболь",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "борсук",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "горобець",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "ворона",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "сорока",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "дятел",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "яструб",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "лебідь",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "журавель",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "чапля",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "кит",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "акула",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "восьминіг",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "краб",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "медуза",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "щука",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "короп",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "сом",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "окунь",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "форель",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "лосось",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "тунець",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "оселедець",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "скумбрія",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "сардина",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "анчоус",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "камбала",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "палтус",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "тріска",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "хек",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "лящ",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "карась",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "йорж",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "морський окунь",
+      "difficulty": "medium",
+      "category": "тварини"
+    },
+    {
+      "word": "коала",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "панда",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "носоріг",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "бегемот",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "леопард",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "гепард",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "пантера",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "горила",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "шимпанзе",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "орангутанг",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "верблюд",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "лама",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "альпака",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "страус",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "павич",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "колібрі",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "тукан",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "какаду",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "фламінго",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "пелікан",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "альбатрос",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "морж",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "тюлень",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "бурундук",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "капібара",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "броненосець",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "лемур",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "сурикат",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "мангуст",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "антилопа",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "газель",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "буйвол",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "бізон",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "гієна",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "шакал",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "рись",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "пума",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "ягуар",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "оцелот",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "тапір",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "вомбат",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "ехидна",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "качкодзьоб",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "аксолотль",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "ігуана",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "хамелеон",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "анаконда",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "кобра",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "пітон",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "манта",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "барак уда",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "морський коник",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "морська зірка",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "каракатиця",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "омар",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "лангуст",
+      "difficulty": "hard",
+      "category": "тварини"
+    },
+    {
+      "word": "стілець",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "стіл",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "ліжко",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "книга",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "ручка",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "олівець",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "зошит",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "папір",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "телефон",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "комп'ютер",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "телевізор",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "годинник",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "двері",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "вікно",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "лампа",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "сумка",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "рюкзак",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "окуляри",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "капелюх",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "парасолька",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "ключ",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "гаманець",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "дзеркало",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "гребінець",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "щітка",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "рушник",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "мило",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "тарілка",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "чашка",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "ложка",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "виделка",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "ніж",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "пляшка",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "склянка",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "каструля",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "сковорода",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "холодильник",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "плита",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "духовка",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "мікрохвильовка",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "подушка",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "ковдра",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "простирадло",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "штори",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "килим",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "вішалка",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "корзина",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "відро",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "швабра",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "віник",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "праска",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "пральна машина",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "фен",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "гудзик",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "нитки",
+      "difficulty": "easy",
+      "category": "предмети"
+    },
+    {
+      "word": "підручник",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "словник",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "атлас",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "глобус",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "калькулятор",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "клавіатура",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "миша",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "монітор",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "принтер",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "сканер",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "динамік",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "навушники",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "мікрофон",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "камера",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "фотоапарат",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "відеокамера",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "флешка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "диск",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "батарейка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "зарядка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "розетка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "вимикач",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "торшер",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "абажур",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "свічка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "ліхтарик",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "компас",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "карта",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "валіза",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "намет",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "спальник",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "термос",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "котелок",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "сокира",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "ліхтар",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "бінокль",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "підзорна труба",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "лупа",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "лінійка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "транспортир",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "циркуль",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "степлер",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "дирокол",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "кнопка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "скріпка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "файл",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "папка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "коробка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "пакет",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "шнур",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "кабель",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "перемикач",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "кавомолка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "блендер",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "тостер",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "міксер",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "чайник",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "кухонний комбайн",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "соковижималка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "мультиварка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "вафельниця",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "електрогриль",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "м'ясорубка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "ваги",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "таймер",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "пилосос",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "посудомийна машина",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "прищіпка",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "телескоп",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "мікроскоп",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "стетоскоп",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "секстант",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "астролябія",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "квадрант",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "барометр",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "гігрометр",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "термометр",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "манометр",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "вольтметр",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "амперметр",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "омметр",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "осцилограф",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "спектрометр",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "хроматограф",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "центрифуга",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "автоклав",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "інкубатор",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "мензурка",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "піпетка",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "бюретка",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "колба",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "пробірка",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "чашка Петрі",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "предметне скло",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "покривне скло",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "шпатель",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "пінцет",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "скальпель",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "катетер",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "шприц",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "голка",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "корсет",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "протез",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "інгалятор",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "небулайзер",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "апарат ШВЛ",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "дефібрилятор",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "електрокардіограф",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "ехокардіограф",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "томограф",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "рентген",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "ультразвук",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "ендоскоп",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "лапароскоп",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "бронхоскоп",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "гастроскоп",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "колоноскоп",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "офтальмоскоп",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "отоскоп",
+      "difficulty": "hard",
+      "category": "предмети"
+    },
+    {
+      "word": "бігти",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "ходити",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "стояти",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "сидіти",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "лежати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "стрибати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "їсти",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "пити",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "спати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "прокидатися",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "мити",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "чистити",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "прибирати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "готувати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "варити",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "смажити",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "різати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "мішати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "читати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "писати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "малювати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "співати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "танцювати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "грати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "дивитися",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "слухати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "говорити",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "кричати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "шептати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "сміятися",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "плакати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "думати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "мріяти",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "любити",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "ненавидіти",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "боятися",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "радіти",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "сумувати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "працювати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "відпочивати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "вчитися",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "викладати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "вчити",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "знати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "розуміти",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "відповідати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "питати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "допомагати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "показувати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "бачити",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "чути",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "відчувати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "торкатися",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "тримати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "взяти",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "дати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "відкривати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "закривати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "кидати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "ловити",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "будувати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "руйнувати",
+      "difficulty": "easy",
+      "category": "дії"
+    },
+    {
+      "word": "підстрибувати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "присідати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "кульгати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "повзти",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "плавати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "пірнати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "летіти",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "ковзати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "падати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "вставати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "лягати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "нахилятися",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "повертатися",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "крутитися",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "обертатися",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "підніматися",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "спускатися",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "підходити",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "віддалятися",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "наближатися",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "переслідувати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "тікати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "ховатися",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "шукати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "знаходити",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "губити",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "пускати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "штовхати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "тягти",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "піднімати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "опускати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "ламати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "ремонтувати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "налагоджувати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "досліджувати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "навчати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "запам'ятовувати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "забувати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "згадувати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "уявляти",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "порівнювати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "вирішувати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "розв'язувати",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "прокрастинувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "медитувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "концентруватися",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "абстрагуватися",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "інтерпретувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "аналізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "синтезувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "класифікувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "категоризувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "систематизувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "узагальнювати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "конкретизувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "деталізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "специфікувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "ідентифікувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "диференціювати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "корелювати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "екстраполювати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "інтерполювати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "апроксимувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "оптимізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "максимізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "мінімізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "нормалізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "стандартизувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "уніфікувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "диверсифікувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "спеціалізуватися",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "універсалізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "індивідуалізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "персоналізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "кастомізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "модифікувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "трансформувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "модернізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "реконструювати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "реорганізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "реструктуризувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "рекомбінувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "декомпозувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "дезінтегрувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "консолідувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "інтегрувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "координувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "синхронізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "гармонізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "балансувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "стабілізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "дестабілізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "нейтралізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "активізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "стимулювати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "інгібувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "каталізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "ферментувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "дистилювати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "сублімувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "кристалізувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "полімеризувати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "окислювати",
+      "difficulty": "hard",
+      "category": "дії"
+    },
+    {
+      "word": "дім",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "школа",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "клас",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "парк",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "сад",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "двір",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "вулиця",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "дорога",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "площа",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "магазин",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "ринок",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "кафе",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "ресторан",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "кінотеатр",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "театр",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "лікарня",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "аптека",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "бібліотека",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "музей",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "церква",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "пошта",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "банк",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "готель",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "вокзал",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "аеропорт",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "порт",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "пляж",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "ліс",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "поле",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "річка",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "озеро",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "море",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "гора",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "долина",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "село",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "місто",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "країна",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "світ",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "планета",
+      "difficulty": "easy",
+      "category": "місця"
+    },
+    {
+      "word": "університет",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "інститут",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "коледж",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "гімназія",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "ліцей",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "дитсадок",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "ясла",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "майданчик",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "стадіон",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "спортзал",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "басейн",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "корт",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "каток",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "трамплін",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "ринг",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "арена",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "амфітеатр",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "цирк",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "зоопарк",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "акваріум",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "планетарій",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "обсерваторія",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "лабораторія",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "кабінет",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "офіс",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "склад",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "цех",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "фабрика",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "завод",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "ферма",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "ранчо",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "плантація",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "виноградник",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "пасовище",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "луг",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "болото",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "джунглі",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "саван а",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "пустеля",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "оазис",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "ущелина",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "каньйон",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "печера",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "грот",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "бухта",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "затока",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "протока",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "архіпелаг",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "півострів",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "мис",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "острів",
+      "difficulty": "medium",
+      "category": "місця"
+    },
+    {
+      "word": "капелла",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "собор",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "базиліка",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "мечеть",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "синагога",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "пагода",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "ступа",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "храм",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "святиня",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "монастир",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "скит",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "обитель",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "єрмітаж",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "ермітаж",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "фортеця",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "бастіон",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "цитадель",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "редут",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "форт",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "замок",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "палац",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "резиденція",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "маєток",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "садиба",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "віла",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "котедж",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "бунгало",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "шале",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "хатинка",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "халупа",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "барак",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "лачуга",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "хижа",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "саркофаг",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "склеп",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "мавзолей",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "усипальниця",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "некрополь",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "кладовище",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "пантеон",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "меморіал",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "кенотаф",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "стела",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "обеліск",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "монумент",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "пам'ятник",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "консерваторія",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "філармонія",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "одеон",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "колізей",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "колосеум",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "іподром",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "велодром",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "трек",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "автодром",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "картодром",
+      "difficulty": "hard",
+      "category": "місця"
+    },
+    {
+      "word": "день",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "ніч",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "ранок",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "вечір",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "сонце",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "місяць",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "зірка",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "хмара",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "дощ",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "сніг",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "вітер",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "грім",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "блискавка",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "веселка",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "вогонь",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "вода",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "земля",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "повітря",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "камінь",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "пісок",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "глина",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "сіль",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "цукор",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "хліб",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "м'ясо",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "овочі",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "фрукти",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "ягоди",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "квіти",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "дерево",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "трава",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "листя",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "гілка",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "корінь",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "насіння",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "плід",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "червоний",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "синій",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "жовтий",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "зелений",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "схід",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "захід",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "північ",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "південь",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "зоря",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "світанок",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "сутінки",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "смерк",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "туман",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "роса",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "іній",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "крига",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "сніжинка",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "град",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "злива",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "буря",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "ураган",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "торнадо",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "циклон",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "тайфун",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "цунамі",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "лавина",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "зсув",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "повінь",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "посуха",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "землетрус",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "виверження",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "бронза",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "латунь",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "платина",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "срібло",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "золото",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "алмаз",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "смарагд",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "рубін",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "сапфір",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "опал",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "бірюза",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "янтар",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "перли на",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "екватор",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "тропік",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "меридіан",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "паралель",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "полюс",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "геліосфера",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "атмосфера",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "стратосфера",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "тропосфера",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "іоносфера",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "мезосфера",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "термосфера",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "екзосфера",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "магнітосфера",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "космос",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "галактика",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "туманність",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "сузір'я",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "метеор",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "метеорит",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "астероїд",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "комета",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "квазар",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "пульсар",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "чорна діра",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "червона діра",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "біла діра",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "червоний карлик",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "білий карлик",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "коричневий карлик",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "червоний гігант",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "синій гігант",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "надгігант",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "гіпергігант",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "наднова",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "гіпернова",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "нейтронна зірка",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "протозірка",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "планетезималь",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "протопланета",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "екзопланета",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "супутник",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "планетоїд",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "транснептуновий об'єкт",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "пояс Койпера",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "хмара Оорта",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "сонячний вітер",
+      "difficulty": "hard",
+      "category": "різне"
+    },
+    {
+      "word": "сонячна буря",
+      "difficulty": "hard",
+      "category": "різне"
+    }
+  ]
+}

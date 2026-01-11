@@ -1,6 +1,7 @@
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import { GameService } from '../services/GameService.js';
 import { SnapshotService } from '../services/SnapshotService.js';
+import { getCategories } from '../word-loader.js';
 import type { GameState, Player, TeamId, WordStatus } from '../../shared/types/game.js';
 
 interface JoinGameData {
@@ -37,6 +38,23 @@ interface HostCloseActivityData {
   confirmed: boolean;
 }
 
+interface InitiateDisputeData {
+  gameId: string;
+  roundNumber: number;
+  wordIndex: number;
+  proposedStatus: WordStatus;
+  reason: string;
+}
+
+interface CastDisputeVoteData {
+  gameId: string;
+  vote: 'agree' | 'disagree';
+}
+
+interface CancelDisputeData {
+  gameId: string;
+}
+
 export class SocketHandler {
   constructor(
     private gameService: GameService,
@@ -49,6 +67,17 @@ export class SocketHandler {
 
       let currentPlayer: Player | null = null;
       let currentGameId: string | null = null;
+
+      // Get available categories
+      socket.on('get-categories', () => {
+        try {
+          const categories = getCategories();
+          socket.emit('categories', categories);
+        } catch (error) {
+          console.error('Error getting categories:', error);
+          socket.emit('categories', ['змішані', 'різне']); // Fallback
+        }
+      });
 
       socket.on('join-game', (data: JoinGameData) => {
         const { gameId, player } = data;
@@ -94,6 +123,19 @@ export class SocketHandler {
 
         if (game) {
           this.broadcastGameState(io, gameId, game, 'game-state');
+        }
+      });
+
+      socket.on('rename-team', (data: { gameId: string; teamId: TeamId; newName: string }) => {
+        if (!currentPlayer) {
+          socket.emit('error', { message: 'Не авторизовано' });
+          return;
+        }
+
+        const game = this.gameService.renameTeam(data.gameId, currentPlayer.id, data.teamId, data.newName);
+
+        if (game) {
+          this.broadcastGameState(io, data.gameId, game, 'game-state');
         }
       });
 
@@ -159,7 +201,10 @@ export class SocketHandler {
         if (result && 'error' in result) {
           socket.emit('error', { message: result.error });
         } else if (result) {
-          if (result.status === 'round-end' || result.status === 'finished') {
+          if (result.status === 'last-word-steal') {
+            this.broadcastGameState(io, gameId, result, 'last-word-steal-started');
+            this.startLastWordStealTimer(io, gameId);
+          } else if (result.status === 'round-end' || result.status === 'finished') {
             this.broadcastGameState(io, gameId, result, 'round-ended');
           } else {
             this.broadcastGameState(io, gameId, result, 'game-state');
@@ -178,7 +223,12 @@ export class SocketHandler {
         const game = this.gameService.endRound(gameId);
 
         if (game) {
-          this.broadcastGameState(io, gameId, game, 'round-ended');
+          if (game.status === 'last-word-steal') {
+            this.broadcastGameState(io, gameId, game, 'last-word-steal-started');
+            this.startLastWordStealTimer(io, gameId);
+          } else {
+            this.broadcastGameState(io, gameId, game, 'round-ended');
+          }
         }
       });
 
@@ -353,6 +403,83 @@ export class SocketHandler {
         }, 500);
       });
 
+      socket.on('initiate-dispute', (data: InitiateDisputeData) => {
+        const { gameId, roundNumber, wordIndex, proposedStatus, reason } = data;
+
+        if (!currentPlayer) {
+          socket.emit('error', { message: 'Не авторизовано' });
+          return;
+        }
+
+        const result = this.gameService.initiateDispute(
+          gameId,
+          currentPlayer.id,
+          roundNumber,
+          wordIndex,
+          proposedStatus,
+          reason
+        );
+
+        if (result && 'error' in result) {
+          socket.emit('dispute-error', { message: result.error });
+        } else if (result) {
+          this.broadcastGameState(io, gameId, result, 'dispute-started');
+        }
+      });
+
+      socket.on('cast-dispute-vote', (data: CastDisputeVoteData) => {
+        const { gameId, vote } = data;
+
+        if (!currentPlayer) {
+          socket.emit('error', { message: 'Не авторизовано' });
+          return;
+        }
+
+        const result = this.gameService.castDisputeVote(gameId, currentPlayer.id, vote);
+
+        if (result && 'error' in result) {
+          socket.emit('dispute-error', { message: result.error });
+        } else if (result) {
+          // Check if dispute was resolved (status changed back to round-end)
+          const eventName = result.status === 'round-end' || result.status === 'finished' ? 'dispute-resolved' : 'dispute-vote-recorded';
+          this.broadcastGameState(io, gameId, result, eventName);
+        }
+      });
+
+      socket.on('cancel-dispute', (data: CancelDisputeData) => {
+        const { gameId } = data;
+
+        if (!currentPlayer) {
+          socket.emit('error', { message: 'Не авторизовано' });
+          return;
+        }
+
+        const result = this.gameService.cancelDispute(gameId, currentPlayer.id);
+
+        if (result && 'error' in result) {
+          socket.emit('dispute-error', { message: result.error });
+        } else if (result) {
+          this.broadcastGameState(io, gameId, result, 'dispute-resolved');
+        }
+      });
+
+      socket.on('mark-steal-word', (data: { gameId: string; success: boolean }) => {
+        const { gameId, success } = data;
+
+        if (!currentPlayer) {
+          socket.emit('error', { message: 'Не авторизовано' });
+          return;
+        }
+
+        const game = this.gameService.markStealWord(gameId, currentPlayer.id, success);
+
+        if (game) {
+          this.broadcastGameState(io, gameId, game, 'round-ended');
+        } else {
+          socket.emit('error', { message: 'Не вдалося відмітити слово' });
+        }
+      });
+
       socket.on('disconnect', () => {
         if (!currentPlayer || !currentGameId) return;
 
@@ -435,6 +562,45 @@ export class SocketHandler {
         clearInterval(intervalId);
 
         const endedGame = this.gameService.endRound(gameId);
+        if (endedGame) {
+          if (endedGame.status === 'last-word-steal') {
+            this.broadcastGameState(io, gameId, endedGame, 'last-word-steal-started');
+            this.startLastWordStealTimer(io, gameId);
+          } else {
+            this.broadcastGameState(io, gameId, endedGame, 'round-ended');
+          }
+        }
+      }
+    }, 1000);
+  }
+
+  private startLastWordStealTimer(io: SocketIOServer, gameId: string): void {
+    const game = this.gameService.getGameState(gameId);
+    if (!game || !game.lastWordSteal) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      const currentGame = this.gameService.getGameState(gameId);
+
+      if (!currentGame || !currentGame.lastWordSteal || currentGame.status !== 'last-word-steal') {
+        clearInterval(intervalId);
+        return;
+      }
+
+      const elapsed = Math.floor((Date.now() - currentGame.lastWordSteal.startTime) / 1000);
+      const timeRemaining = 15 - elapsed;
+
+      currentGame.lastWordSteal.timeRemaining = Math.max(0, timeRemaining);
+
+      io.to(gameId).emit('steal-timer-update', {
+        timeRemaining: currentGame.lastWordSteal.timeRemaining,
+      });
+
+      if (currentGame.lastWordSteal.timeRemaining <= 0) {
+        clearInterval(intervalId);
+
+        const endedGame = this.gameService.endLastWordSteal(gameId);
         if (endedGame) {
           this.broadcastGameState(io, gameId, endedGame, 'round-ended');
         }

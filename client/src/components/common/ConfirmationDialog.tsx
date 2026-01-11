@@ -11,7 +11,7 @@ interface ConfirmationDialogProps {
   onCancel: () => void;
 }
 
-export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
+export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = React.memo(({
   isOpen,
   title,
   message,
@@ -46,4 +46,4 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
       </div>
     </div>
   );
-};
+});

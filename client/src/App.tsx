@@ -10,37 +10,42 @@ import { LobbyScreen } from '@/components/screens/LobbyScreen';
 import { CountdownScreen } from '@/components/screens/CountdownScreen';
 import { GameScreen } from '@/components/screens/GameScreen';
 import { RoundEndScreen } from '@/components/screens/RoundEndScreen';
+import { LastWordStealScreen } from '@/components/screens/LastWordStealScreen';
+import { DisputeScreen } from '@/components/screens/DisputeScreen';
 import { GameEndScreen } from '@/components/screens/GameEndScreen';
+import { SCREENS, type Screen } from '@/constants/screens';
 import './styles/main.scss';
-
-type Screen = 'loading' | 'guest-login' | 'menu' | 'lobby' | 'countdown' | 'game' | 'round-end' | 'game-end';
 
 const AppContent: React.FC = () => {
   const { isReady, mode, setGuestName, error: authError } = useAuth();
   const { gameState, error: gameError } = useGame();
-  const [currentScreen, setCurrentScreen] = useState<Screen>('loading');
+  const [currentScreen, setCurrentScreen] = useState<Screen>(SCREENS.LOADING);
 
   useEffect(() => {
     if (!isReady) {
       if (mode === 'guest') {
         // Guest mode but name not set yet
-        setCurrentScreen('guest-login');
+        setCurrentScreen(SCREENS.GUEST_LOGIN);
       } else {
         // Loading Discord auth
-        setCurrentScreen('loading');
+        setCurrentScreen(SCREENS.LOADING);
       }
     } else if (!gameState) {
-      setCurrentScreen('menu');
+      setCurrentScreen(SCREENS.MENU);
     } else if (gameState.status === 'lobby') {
-      setCurrentScreen('lobby');
+      setCurrentScreen(SCREENS.LOBBY);
     } else if (gameState.status === 'countdown') {
-      setCurrentScreen('countdown');
+      setCurrentScreen(SCREENS.COUNTDOWN);
     } else if (gameState.status === 'playing') {
-      setCurrentScreen('game');
+      setCurrentScreen(SCREENS.GAME);
     } else if (gameState.status === 'round-end') {
-      setCurrentScreen('round-end');
+      setCurrentScreen(SCREENS.ROUND_END);
+    } else if (gameState.status === 'last-word-steal') {
+      setCurrentScreen(SCREENS.LAST_WORD_STEAL);
+    } else if (gameState.status === 'dispute') {
+      setCurrentScreen(SCREENS.DISPUTE);
     } else if (gameState.status === 'finished') {
-      setCurrentScreen('game-end');
+      setCurrentScreen(SCREENS.GAME_END);
     }
   }, [isReady, mode, gameState]);
 
@@ -52,14 +57,16 @@ const AppContent: React.FC = () => {
 
   return (
     <div id="app">
-      {currentScreen === 'loading' && <LoadingScreen />}
-      {currentScreen === 'guest-login' && <GuestLoginScreen onLogin={handleGuestLogin} />}
-      {currentScreen === 'menu' && <MenuScreen />}
-      {currentScreen === 'lobby' && <LobbyScreen />}
-      {currentScreen === 'countdown' && <CountdownScreen />}
-      {currentScreen === 'game' && <GameScreen />}
-      {currentScreen === 'round-end' && <RoundEndScreen />}
-      {currentScreen === 'game-end' && <GameEndScreen />}
+      {currentScreen === SCREENS.LOADING && <LoadingScreen />}
+      {currentScreen === SCREENS.GUEST_LOGIN && <GuestLoginScreen onLogin={handleGuestLogin} />}
+      {currentScreen === SCREENS.MENU && <MenuScreen />}
+      {currentScreen === SCREENS.LOBBY && <LobbyScreen />}
+      {currentScreen === SCREENS.COUNTDOWN && <CountdownScreen />}
+      {currentScreen === SCREENS.GAME && <GameScreen />}
+      {currentScreen === SCREENS.ROUND_END && <RoundEndScreen />}
+      {currentScreen === SCREENS.LAST_WORD_STEAL && <LastWordStealScreen />}
+      {currentScreen === SCREENS.DISPUTE && <DisputeScreen />}
+      {currentScreen === SCREENS.GAME_END && <GameEndScreen />}
       <Toast message={error} type="error" />
     </div>
   );

@@ -1,4 +1,4 @@
-import type { Player } from './game';
+import type { Player } from './game.js';
 
 export type AuthMode = 'discord' | 'guest' | 'loading';
 

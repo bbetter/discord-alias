@@ -8,6 +8,7 @@ import type {
   WordStatus,
   GameSummary,
   QuitWarnings,
+  DisputeInfo,
 } from '../../shared/types/game.js';
 
 interface GameError {
@@ -36,6 +37,8 @@ export class GameService {
         difficulty: 'змішані',
         pointsToWin: 30,
         wordsPerRound: 20,
+        skipPenalty: -1,
+        lastWordStealEnabled: false,
       },
       teams: {
         teamA: {
@@ -51,11 +54,16 @@ export class GameService {
       },
       presence: {},
       currentRound: null,
+      lastWordSteal: null,
       history: [],
       roundNumber: 0,
       teamARounds: 0,
       teamBRounds: 0,
       currentTeam: 'teamA',
+      currentDispute: null,
+      disputeQueue: [],
+      disputeHistory: [],
+      usedWords: [],
     };
 
     this.games.set(instanceId, gameState);
@@ -93,6 +101,22 @@ export class GameService {
     game.teams.teamA.players = game.teams.teamA.players.filter((p) => p.id !== playerId);
     game.teams.teamB.players = game.teams.teamB.players.filter((p) => p.id !== playerId);
 
+    return game;
+  }
+
+  renameTeam(gameId: string, playerId: string, teamId: TeamId, newName: string): GameState | null {
+    const game = this.games.get(gameId);
+    if (!game || game.status !== 'lobby' || game.host !== playerId) {
+      return null;
+    }
+
+    const trimmedName = newName.trim();
+    if (!trimmedName || trimmedName.length > 30) {
+      return null;
+    }
+
+    game.teams[teamId].name = trimmedName;
+    this.snapshotService.saveSnapshot(game);
     return game;
   }
 
@@ -201,12 +225,17 @@ export class GameService {
     const cards = getRandomWords(
       game.settings.category,
       game.settings.difficulty,
-      game.settings.wordsPerRound
+      game.settings.wordsPerRound,
+      game.usedWords
     ).map((wordObj) => ({
       word: wordObj.word,
       difficulty: wordObj.difficulty,
       status: 'pending' as WordStatus,
     }));
+
+    // Add new words to usedWords to prevent duplicates
+    const newWords = cards.map((card) => card.word);
+    game.usedWords.push(...newWords);
 
     game.currentRound = {
       team: game.currentTeam,
@@ -282,7 +311,30 @@ export class GameService {
       return null;
     }
 
-    const points = game.currentRound.correctCount;
+    // Check for last word steal scenario
+    if (game.settings.lastWordStealEnabled) {
+      const lastCard = game.currentRound.cards[game.currentRound.cards.length - 1];
+      if (lastCard && lastCard.status === 'pending') {
+        // Initiate last word steal
+        const stealingTeam = game.currentRound.team === 'teamA' ? 'teamB' : 'teamA';
+        game.lastWordSteal = {
+          word: lastCard.word,
+          difficulty: lastCard.difficulty,
+          stealingTeam: stealingTeam,
+          startTime: Date.now(),
+          timeRemaining: 15,
+          originalTeam: game.currentRound.team,
+        };
+        game.status = 'last-word-steal';
+        this.snapshotService.saveSnapshot(game);
+        return game;
+      }
+    }
+
+    // Calculate points with skip penalty
+    const correctPoints = game.currentRound.correctCount;
+    const skipPenalty = game.currentRound.skippedCount * game.settings.skipPenalty;
+    const points = correctPoints + skipPenalty;
 
     // Calculate round duration
     const roundStartTime = game.currentRound.startTime;
@@ -309,6 +361,105 @@ export class GameService {
       game.endedAt = new Date().toISOString();
       game.winner = game.currentRound.team;
       game.currentRound = null;
+      this.snapshotService.saveSnapshot(game);
+      return game;
+    }
+
+    game.currentTeam = game.currentTeam === 'teamA' ? 'teamB' : 'teamA';
+    game.status = 'round-end';
+
+    this.snapshotService.saveSnapshot(game);
+    return game;
+  }
+
+  markStealWord(gameId: string, playerId: string, success: boolean): GameState | null {
+    const game = this.games.get(gameId);
+    if (!game || game.status !== 'last-word-steal' || !game.lastWordSteal || !game.currentRound) {
+      return null;
+    }
+
+    // Verify player is on the stealing team
+    const stealingTeam = game.teams[game.lastWordSteal.stealingTeam];
+    const isOnStealingTeam = stealingTeam.players.some(p => p.id === playerId);
+    if (!isOnStealingTeam) {
+      return null;
+    }
+
+    // Mark the last card in the round
+    const lastCard = game.currentRound.cards[game.currentRound.cards.length - 1];
+    if (lastCard) {
+      if (success) {
+        lastCard.status = 'correct';
+        // Award point to stealing team
+        game.teams[game.lastWordSteal.stealingTeam].score += 1;
+      } else {
+        lastCard.status = 'skipped';
+      }
+    }
+
+    // Clear last word steal and proceed to round end
+    game.lastWordSteal = null;
+
+    // Now properly end the round and add to history
+    return this.finishRoundAfterSteal(gameId);
+  }
+
+  endLastWordSteal(gameId: string): GameState | null {
+    const game = this.games.get(gameId);
+    if (!game || game.status !== 'last-word-steal' || !game.lastWordSteal || !game.currentRound) {
+      return null;
+    }
+
+    // Time expired, mark last card as skipped
+    const lastCard = game.currentRound.cards[game.currentRound.cards.length - 1];
+    if (lastCard && lastCard.status === 'pending') {
+      lastCard.status = 'skipped';
+    }
+
+    // Clear last word steal and proceed to round end
+    game.lastWordSteal = null;
+
+    return this.finishRoundAfterSteal(gameId);
+  }
+
+  private finishRoundAfterSteal(gameId: string): GameState | null {
+    const game = this.games.get(gameId);
+    if (!game || !game.currentRound) {
+      return null;
+    }
+
+    // Calculate points with skip penalty
+    const correctPoints = game.currentRound.correctCount;
+    const skipPenalty = game.currentRound.skippedCount * game.settings.skipPenalty;
+    const points = correctPoints + skipPenalty;
+
+    // Calculate round duration
+    const roundStartTime = game.currentRound.startTime;
+    const roundEndTime = Date.now();
+    const durationSeconds = Math.floor((roundEndTime - roundStartTime) / 1000);
+
+    // Note: Score was already updated during the round, only need to add to history
+    game.history.push({
+      roundNumber: game.roundNumber,
+      team: game.currentRound.team,
+      explainer: game.currentRound.explainer,
+      cards: game.currentRound.cards,
+      correctCount: game.currentRound.correctCount,
+      skippedCount: game.currentRound.skippedCount,
+      points: points,
+      durationSeconds: durationSeconds,
+      startedAt: new Date(roundStartTime).toISOString(),
+      endedAt: new Date(roundEndTime).toISOString(),
+    });
+
+    // Check for win condition
+    if (game.teams.teamA.score >= game.settings.pointsToWin ||
+        game.teams.teamB.score >= game.settings.pointsToWin) {
+      game.status = 'finished';
+      game.endedAt = new Date().toISOString();
+      game.winner = game.teams.teamA.score >= game.settings.pointsToWin ? 'teamA' : 'teamB';
+      game.currentRound = null;
+      this.snapshotService.saveSnapshot(game);
       return game;
     }
 
@@ -347,6 +498,10 @@ export class GameService {
     game.teamBRounds = 0;
     game.currentTeam = 'teamA';
     game.winner = undefined;
+    game.currentDispute = null;
+    game.disputeQueue = [];
+    game.disputeHistory = [];
+    game.usedWords = [];
 
     return game;
   }
@@ -450,6 +605,20 @@ export class GameService {
   }
 
   restoreGame(game: GameState): void {
+    // Migration: Initialize dispute fields for old game snapshots
+    if (!game.currentDispute) {
+      game.currentDispute = null;
+    }
+    if (!game.disputeQueue) {
+      game.disputeQueue = [];
+    }
+    if (!game.disputeHistory) {
+      game.disputeHistory = [];
+    }
+    if (!game.usedWords) {
+      game.usedWords = [];
+    }
+
     this.games.set(game.gameId, game);
   }
 
@@ -466,6 +635,7 @@ export class GameService {
         countdown: rooms.filter((g) => g.status === 'countdown').length,
         playing: rooms.filter((g) => g.status === 'playing').length,
         'round-end': rooms.filter((g) => g.status === 'round-end').length,
+        dispute: rooms.filter((g) => g.status === 'dispute').length,
         finished: rooms.filter((g) => g.status === 'finished').length,
       },
     };
@@ -484,5 +654,267 @@ export class GameService {
     }
 
     return removed;
+  }
+
+  // Helper method to get all players from both teams
+  private getAllPlayers(game: GameState): Player[] {
+    return [...game.teams.teamA.players, ...game.teams.teamB.players];
+  }
+
+  // Initiate a dispute for a word
+  initiateDispute(
+    gameId: string,
+    playerId: string,
+    roundNumber: number,
+    wordIndex: number,
+    proposedStatus: WordStatus,
+    reason: string
+  ): GameResult | null {
+    const game = this.games.get(gameId);
+    if (!game) {
+      return null;
+    }
+
+    // Must be in round-end or dispute status
+    if (game.status !== 'round-end' && game.status !== 'dispute') {
+      return { error: 'Можна оскаржувати тільки після закінчення раунду' };
+    }
+
+    // Verify player is in the game
+    const allPlayers = this.getAllPlayers(game);
+    const player = allPlayers.find((p) => p.id === playerId);
+    if (!player) {
+      return { error: 'Гравець не знайдений у грі' };
+    }
+
+    // Find the round history
+    const roundHistory = game.history.find((h) => h.roundNumber === roundNumber);
+    if (!roundHistory) {
+      return { error: 'Раунд не знайдено' };
+    }
+
+    // Validate word index
+    if (wordIndex < 0 || wordIndex >= roundHistory.cards.length) {
+      return { error: 'Неправильний індекс слова' };
+    }
+
+    const wordCard = roundHistory.cards[wordIndex];
+
+    // Can only dispute correct or skipped words
+    if (wordCard.status !== 'correct' && wordCard.status !== 'skipped') {
+      return { error: 'Можна оскаржувати тільки правильні або пропущені слова' };
+    }
+
+    // Check if word has already been disputed
+    const alreadyDisputed = game.disputeHistory.some(
+      (d) => d.roundNumber === roundNumber && d.wordIndex === wordIndex
+    );
+    if (alreadyDisputed) {
+      return { error: 'Це слово вже було оскаржене' };
+    }
+
+    // Check if word is in current dispute or queue
+    const inProgress = [game.currentDispute, ...game.disputeQueue].some(
+      (d) => d && d.roundNumber === roundNumber && d.wordIndex === wordIndex
+    );
+    if (inProgress) {
+      return { error: 'Оскарження цього слова вже в процесі' };
+    }
+
+    // Create dispute info
+    const dispute: DisputeInfo = {
+      disputeId: `dispute-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+      roundNumber,
+      wordIndex,
+      word: wordCard.word,
+      originalStatus: wordCard.status,
+      proposedStatus,
+      initiatedBy: player,
+      reason,
+      votes: {},
+      createdAt: new Date().toISOString(),
+    };
+
+    // If no dispute is active, set this as current dispute
+    if (!game.currentDispute) {
+      game.currentDispute = dispute;
+      game.status = 'dispute';
+    } else {
+      // Add to queue
+      game.disputeQueue.push(dispute);
+    }
+
+    this.snapshotService.saveSnapshot(game);
+    return game;
+  }
+
+  // Cast a vote on the current dispute
+  castDisputeVote(gameId: string, playerId: string, vote: 'agree' | 'disagree'): GameResult | null {
+    const game = this.games.get(gameId);
+    if (!game) {
+      return null;
+    }
+
+    // Must be in dispute status
+    if (game.status !== 'dispute') {
+      return { error: 'Немає активного оскарження' };
+    }
+
+    if (!game.currentDispute) {
+      return { error: 'Немає активного оскарження' };
+    }
+
+    // Verify player is in the game
+    const allPlayers = this.getAllPlayers(game);
+    const player = allPlayers.find((p) => p.id === playerId);
+    if (!player) {
+      return { error: 'Гравець не знайдений у грі' };
+    }
+
+    // Record the vote
+    game.currentDispute.votes[playerId] = vote;
+
+    // Check if all players have voted
+    const totalPlayers = allPlayers.length;
+    const voteCount = Object.keys(game.currentDispute.votes).length;
+
+    if (voteCount >= totalPlayers) {
+      // All players have voted, resolve the dispute
+      return this.resolveDispute(gameId);
+    }
+
+    // Not all voted yet, just save and return
+    this.snapshotService.saveSnapshot(game);
+    return game;
+  }
+
+  // Resolve the current dispute (private method)
+  private resolveDispute(gameId: string): GameState | null {
+    const game = this.games.get(gameId);
+    if (!game || !game.currentDispute) {
+      return null;
+    }
+
+    const dispute = game.currentDispute;
+
+    // Count votes
+    const votes = Object.values(dispute.votes);
+    const agreeCount = votes.filter((v) => v === 'agree').length;
+    const disagreeCount = votes.filter((v) => v === 'disagree').length;
+
+    // Determine resolution
+    let resolution: 'accepted' | 'rejected' | 'tied';
+    if (agreeCount > disagreeCount) {
+      resolution = 'accepted';
+    } else if (disagreeCount > agreeCount) {
+      resolution = 'rejected';
+    } else {
+      resolution = 'tied';
+    }
+
+    dispute.resolution = resolution;
+    dispute.resolvedAt = new Date().toISOString();
+
+    // Apply changes if accepted
+    if (resolution === 'accepted') {
+      const roundHistory = game.history.find((h) => h.roundNumber === dispute.roundNumber);
+      if (roundHistory) {
+        const card = roundHistory.cards[dispute.wordIndex];
+        const oldStatus = card.status;
+        const newStatus = dispute.proposedStatus;
+
+        // Update card status
+        card.status = newStatus;
+
+        // Calculate deltas for counts
+        let correctDelta = 0;
+        let skippedDelta = 0;
+
+        if (oldStatus === 'correct' && newStatus === 'skipped') {
+          correctDelta = -1;
+          skippedDelta = 1;
+        } else if (oldStatus === 'skipped' && newStatus === 'correct') {
+          correctDelta = 1;
+          skippedDelta = -1;
+        }
+
+        // Update round history counts
+        roundHistory.correctCount += correctDelta;
+        roundHistory.skippedCount += skippedDelta;
+        roundHistory.points += correctDelta;
+
+        // Update team score
+        game.teams[roundHistory.team].score += correctDelta;
+
+        // Check if score change causes win condition
+        if (game.teams[roundHistory.team].score >= game.settings.pointsToWin) {
+          game.status = 'finished';
+          game.winner = roundHistory.team;
+          game.endedAt = new Date().toISOString();
+          game.currentDispute = null;
+          game.disputeHistory.push(dispute);
+          this.snapshotService.saveSnapshot(game);
+          return game;
+        }
+      }
+    }
+
+    // Move current dispute to history
+    game.disputeHistory.push(dispute);
+    game.currentDispute = null;
+
+    // Check if there are more disputes in the queue
+    if (game.disputeQueue.length > 0) {
+      game.currentDispute = game.disputeQueue.shift()!;
+      game.status = 'dispute';
+    } else {
+      // No more disputes, return to round-end
+      game.status = 'round-end';
+    }
+
+    this.snapshotService.saveSnapshot(game);
+    return game;
+  }
+
+  // Cancel a dispute (only by initiator)
+  cancelDispute(gameId: string, playerId: string): GameResult | null {
+    const game = this.games.get(gameId);
+    if (!game) {
+      return null;
+    }
+
+    // Must be in dispute status
+    if (game.status !== 'dispute') {
+      return { error: 'Немає активного оскарження' };
+    }
+
+    if (!game.currentDispute) {
+      return { error: 'Немає активного оскарження' };
+    }
+
+    // Verify player is the initiator
+    if (game.currentDispute.initiatedBy.id !== playerId) {
+      return { error: 'Тільки ініціатор може скасувати оскарження' };
+    }
+
+    // Mark as cancelled
+    game.currentDispute.resolution = 'tied'; // Use 'tied' to indicate no change
+    game.currentDispute.resolvedAt = new Date().toISOString();
+
+    // Move to history
+    game.disputeHistory.push(game.currentDispute);
+    game.currentDispute = null;
+
+    // Check if there are more disputes in the queue
+    if (game.disputeQueue.length > 0) {
+      game.currentDispute = game.disputeQueue.shift()!;
+      game.status = 'dispute';
+    } else {
+      // No more disputes, return to round-end
+      game.status = 'round-end';
+    }
+
+    this.snapshotService.saveSnapshot(game);
+    return game;
   }
 }

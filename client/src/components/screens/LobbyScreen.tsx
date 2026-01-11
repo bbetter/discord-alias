@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGame } from '@/context/GameContext';
 import { PlayerCard } from '@/components/common/PlayerCard';
 import { ConfirmationDialog } from '@/components/common/ConfirmationDialog';
+import { QuitWarningMessage } from '@/components/common/QuitWarningMessage';
 import type { Team } from '@/types/game';
 
 export const LobbyScreen: React.FC = () => {
@@ -12,7 +13,9 @@ export const LobbyScreen: React.FC = () => {
     quitWarnings,
     showQuitDialog,
     showCloseDialog,
+    availableCategories,
     selectTeam,
+    renameTeam,
     updateSettings,
     startGame,
     quitGame,
@@ -21,39 +24,41 @@ export const LobbyScreen: React.FC = () => {
     confirmCloseActivity,
   } = useGame();
 
+  const [editingTeam, setEditingTeam] = useState<'teamA' | 'teamB' | null>(null);
+  const [teamNameInput, setTeamNameInput] = useState('');
+
   if (!gameState) return null;
 
   const handleSettingChange = (key: string, value: any) => {
     updateSettings({ [key]: value });
   };
 
-  const generateQuitWarningMessage = () => {
-    if (!quitWarnings) return '';
+  const startEditingTeamName = (teamId: 'teamA' | 'teamB', currentName: string) => {
+    if (!isHost) return;
+    setEditingTeam(teamId);
+    setTeamNameInput(currentName);
+  };
 
-    const messages: string[] = [];
-
-    if (quitWarnings.teamBelowMinimum) {
-      messages.push(
-        '⚠️ Після вашого виходу у вашій команді залишиться менше 2 гравців. Гра може не розпочатися або буде зупинена.'
-      );
+  const saveTeamName = (teamId: 'teamA' | 'teamB') => {
+    const trimmedName = teamNameInput.trim();
+    if (trimmedName && trimmedName !== gameState.teams[teamId].name) {
+      renameTeam(teamId, trimmedName);
     }
+    setEditingTeam(null);
+    setTeamNameInput('');
+  };
 
-    if (quitWarnings.isCurrentExplainer) {
-      messages.push(
-        '⚠️ Ви зараз пояснюєте слова. Ваш вихід автоматично завершить поточний раунд.'
-      );
+  const cancelEditingTeamName = () => {
+    setEditingTeam(null);
+    setTeamNameInput('');
+  };
+
+  const handleTeamNameKeyDown = (e: React.KeyboardEvent, teamId: 'teamA' | 'teamB') => {
+    if (e.key === 'Enter') {
+      saveTeamName(teamId);
+    } else if (e.key === 'Escape') {
+      cancelEditingTeamName();
     }
-
-    return (
-      <div className="warning-messages">
-        {messages.map((msg, idx) => (
-          <p key={idx} className="warning-message">
-            {msg}
-          </p>
-        ))}
-        <p className="confirm-question">Ви впевнені, що хочете вийти?</p>
-      </div>
-    );
   };
 
   const canStart =
@@ -62,11 +67,33 @@ export const LobbyScreen: React.FC = () => {
 
   const renderTeam = (teamId: 'teamA' | 'teamB', team: Team) => {
     const teamClass = teamId === 'teamA' ? 'team-a' : 'team-b';
+    const isEditing = editingTeam === teamId;
 
     return (
       <div className="team-box">
         <div className={`team-header ${teamClass}-header`}>
-          <h2>{team.name}</h2>
+          {isEditing ? (
+            <div className="team-name-editor">
+              <input
+                type="text"
+                value={teamNameInput}
+                onChange={(e) => setTeamNameInput(e.target.value)}
+                onKeyDown={(e) => handleTeamNameKeyDown(e, teamId)}
+                onBlur={() => saveTeamName(teamId)}
+                maxLength={30}
+                autoFocus
+                className="team-name-input"
+              />
+            </div>
+          ) : (
+            <h2
+              className={isHost ? 'editable-team-name' : ''}
+              onClick={() => startEditingTeamName(teamId, team.name)}
+              title={isHost ? 'Клацніть для редагування' : ''}
+            >
+              {team.name}
+            </h2>
+          )}
           <div className="team-score">{team.score}</div>
         </div>
         <div className="team-players">
@@ -167,12 +194,11 @@ export const LobbyScreen: React.FC = () => {
                   value={gameState.settings.category}
                   onChange={(e) => handleSettingChange('category', e.target.value)}
                 >
-                  <option value="змішані">Змішані</option>
-                  <option value="тварини">Тварини</option>
-                  <option value="предмети">Предмети</option>
-                  <option value="дії">Дії</option>
-                  <option value="місця">Місця</option>
-                  <option value="різне">Різне</option>
+                  {availableCategories.map((category) => (
+                    <option key={category} value={category}>
+                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="setting">
@@ -202,6 +228,32 @@ export const LobbyScreen: React.FC = () => {
                   step="5"
                 />
               </div>
+              <div className="setting">
+                <label>Штраф за пропущені слова: {gameState.settings.skipPenalty === 0 ? 'Немає' : `${gameState.settings.skipPenalty} очко`}</label>
+                <input
+                  type="range"
+                  value={gameState.settings.skipPenalty}
+                  onChange={(e) =>
+                    handleSettingChange('skipPenalty', parseInt(e.target.value))
+                  }
+                  min="-5"
+                  max="0"
+                  step="1"
+                  className="slider"
+                />
+              </div>
+              <div className="setting setting-checkbox">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={gameState.settings.lastWordStealEnabled}
+                    onChange={(e) =>
+                      handleSettingChange('lastWordStealEnabled', e.target.checked)
+                    }
+                  />
+                  <span>Останнє слово можна перехопити (15 сек)</span>
+                </label>
+              </div>
             </div>
           </div>
         )}
@@ -228,7 +280,7 @@ export const LobbyScreen: React.FC = () => {
         <ConfirmationDialog
           isOpen={showQuitDialog}
           title="Вийти з гри?"
-          message={generateQuitWarningMessage()}
+          message={<QuitWarningMessage warnings={quitWarnings} />}
           confirmText="Вийти"
           cancelText="Скасувати"
           confirmStyle="danger"

@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "name": "Example Word Pack",
+    "description": "An example word pack demonstrating the .wordspack format",
+    "category": "різне",
+    "author": "Your Name",
+    "version": "1.0.0",
+    "language": "uk",
+    "createdAt": "2026-01-10T00:00:00.000Z",
+    "updatedAt": "2026-01-10T00:00:00.000Z"
+  },
+  "words": [
+    {
+      "word": "сонце",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "місяць",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "зірка",
+      "difficulty": "easy",
+      "category": "різне"
+    },
+    {
+      "word": "комп'ютер",
+      "difficulty": "medium",
+      "category": "предмети"
+    },
+    {
+      "word": "програмування",
+      "difficulty": "medium",
+      "category": "дії"
+    },
+    {
+      "word": "алгоритм",
+      "difficulty": "medium",
+      "category": "різне"
+    },
+    {
+      "word": "квантовий",
+      "difficulty": "hard"
+    },
+    {
+      "word": "парадокс",
+      "difficulty": "hard"
+    },
+    {
+      "word": "філософія",
+      "difficulty": "hard"
+    }
+  ]
+}

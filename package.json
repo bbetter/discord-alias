@@ -12,7 +12,11 @@
     "preview": "vite preview",
     "start": "tsx server/index.ts",
     "deploy": "./scripts/push-to-minipc.sh",
-    "migrate:words": "tsx server/scripts/migrate-to-default.ts"
+    "migrate:words": "tsx server/scripts/migrate-to-default.ts",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:orchestrated": "playwright test orchestrated-game-clean.spec.ts --headed"
   },
   "dependencies": {
     "@discord/embedded-app-sdk": "^1.2.0",
@@ -27,6 +31,7 @@
     "tsx": "^4.21.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@types/express": "^5.0.6",
     "@types/node": "^25.0.3",
     "@types/react": "^18.2.48",

@@ -8,7 +8,13 @@ import { fileURLToPath } from 'url';
 import { SocketHandler } from './handlers/SocketHandler.js';
 import { GameService } from './services/GameService.js';
 import { SnapshotService } from './services/SnapshotService.js';
+import { sessionLoggerService } from './services/SessionLoggerService.js';
+import { createLogger, disableConsoleInProduction } from './utils/logger.js';
+import { requestLogger } from './middleware/requestLogger.js';
 import adminRoutes from './admin/admin-routes.js';
+
+const serverLogger = createLogger('SERVER');
+const authLogger = createLogger('AUTH');
 
 dotenv.config();
 
@@ -40,6 +46,7 @@ const ADMIN_PORT = Number(process.env.ADMIN_PORT) || 3001;
 // Middleware
 app.use(express.json());
 adminApp.use(express.json());
+adminApp.use(requestLogger);
 
 // Static Files
 app.use(express.static(distPath));
@@ -63,17 +70,17 @@ app.post('/api/token', async (req: Request, res: Response) => {
     const clientSecret = process.env.DISCORD_CLIENT_SECRET;
 
     if (!redirectUri) {
-      console.error('DISCORD_REDIRECT_URI not configured');
+      authLogger.error({ tag: 'ERROR', error: 'DISCORD_REDIRECT_URI not configured' }, '[ERROR] Discord config missing');
       return res.status(500).json({ error: 'Server configuration error' });
     }
 
     if (!clientId) {
-      console.error('VITE_DISCORD_CLIENT_ID not configured');
+      authLogger.error({ tag: 'ERROR', error: 'VITE_DISCORD_CLIENT_ID not configured' }, '[ERROR] Discord config missing');
       return res.status(500).json({ error: 'Server configuration error' });
     }
 
     if (!clientSecret) {
-      console.error('DISCORD_CLIENT_SECRET not configured');
+      authLogger.error({ tag: 'ERROR', error: 'DISCORD_CLIENT_SECRET not configured' }, '[ERROR] Discord config missing');
       return res.status(500).json({ error: 'Server configuration error' });
     }
 
@@ -93,7 +100,7 @@ app.post('/api/token', async (req: Request, res: Response) => {
     const tokenData = await tokenResponse.json() as any;
 
     if (!tokenResponse.ok) {
-      console.error('Discord token exchange failed:', tokenData);
+      authLogger.error({ tag: 'AUTH', error: 'Discord token exchange failed', status: tokenResponse.status }, '[AUTH] Token exchange failed');
       return res.status(tokenResponse.status).json(tokenData);
     }
 
@@ -105,10 +112,10 @@ app.post('/api/token', async (req: Request, res: Response) => {
       scope: tokenData.scope,
     };
 
-    console.log(`✅ Discord token exchange successful`);
+    authLogger.info({ tag: 'AUTH', action: 'token_exchange_success' }, '[AUTH] Discord token exchange successful');
     res.json(authResponse);
   } catch (err) {
-    console.error('Token exchange error:', err);
+    authLogger.error({ tag: 'ERROR', error: err instanceof Error ? err.message : 'Unknown error' }, '[ERROR] Token exchange error');
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -135,15 +142,24 @@ adminApp.use('/admin/api', adminRoutes);
 
 // Bootstrap
 async function bootstrap(): Promise<void> {
+  // Disable console logging in production
+  disableConsoleInProduction();
+
+  // Run log cleanup on startup
+  const deletedCount = await sessionLoggerService.cleanup();
+  if (deletedCount > 0) {
+    serverLogger.info({ tag: 'SERVER', deletedCount }, `[SERVER] Cleaned up ${deletedCount} old log files`);
+  }
+
   const socketHandler = new SocketHandler(gameService, snapshotService);
   socketHandler.setupHandlers(io);
 
   httpServer.listen(PORT, '0.0.0.0', () => {
-    console.log(`🎮 Alias Game Server running on :${PORT}`);
+    serverLogger.info({ tag: 'SERVER', port: PORT }, `[SERVER] Alias Game Server running on port ${PORT}`);
   });
 
   adminApp.listen(ADMIN_PORT, '0.0.0.0', () => {
-    console.log(`🛠 Admin server running on :${ADMIN_PORT}`);
+    serverLogger.info({ tag: 'SERVER', port: ADMIN_PORT }, `[SERVER] Admin server running on port ${ADMIN_PORT}`);
   });
 }
 
@@ -151,8 +167,8 @@ bootstrap();
 
 // Graceful Shutdown
 process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down...');
-  httpServer.close(() => console.log('Main server closed'));
+  serverLogger.info({ tag: 'SERVER' }, '[SERVER] SIGTERM received, shutting down');
+  httpServer.close(() => serverLogger.info({ tag: 'SERVER' }, '[SERVER] Main server closed'));
 });
 
 // Export services for use in other modules

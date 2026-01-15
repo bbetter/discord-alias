@@ -1,22 +1,23 @@
 .menu-container {
-  background: white;
-  border-radius: 16px;
+  background: $surface-color;
+  border-radius: 8px;
   padding: 40px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   max-width: 500px;
   width: 100%;
   text-align: center;
 
   h1 {
-    font-size: 48px;
+    font-size: 56px;
     margin-bottom: 10px;
     color: $text-primary;
+    font-weight: 900;
   }
 
   .subtitle {
     color: $text-secondary;
     font-size: 18px;
     margin-bottom: 30px;
+    font-weight: 500;
   }
 
   .player-info {
@@ -26,9 +27,9 @@
     gap: 12px;
     margin-bottom: 30px;
     padding: 12px 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    background: rgba(88, 101, 242, 0.2);
+    border: 2px solid $primary-color;
+    border-radius: 8px;
 
     .player-avatar {
       width: 40px;
@@ -58,19 +59,25 @@
     gap: 10px;
     margin-top: 20px;
     padding-top: 20px;
-    border-top: 1px solid #ecf0f1;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 
     input {
       padding: 12px;
-      border: 2px solid #ecf0f1;
+      border: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 8px;
       font-size: 16px;
       text-align: center;
       text-transform: uppercase;
+      background: rgba(0, 0, 0, 0.3);
+      color: $text-primary;
 
       &:focus {
         outline: none;
         border-color: $primary-color;
+      }
+
+      &::placeholder {
+        color: $text-secondary;
       }
     }
   }
@@ -93,15 +100,71 @@
         font-size: 16px;
       }
 
+      .input-with-icon {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        input {
+          padding: 12px;
+          padding-right: 50px;
+          border: 2px solid rgba(255, 255, 255, 0.2);
+          border-radius: 8px;
+          font-size: 16px;
+          flex: 1;
+          background: rgba(0, 0, 0, 0.3);
+          color: $text-primary;
+
+          &:focus {
+            outline: none;
+            border-color: $primary-color;
+          }
+
+          &::placeholder {
+            color: $text-secondary;
+          }
+        }
+
+        .randomize-btn {
+          position: absolute;
+          right: 8px;
+          background: none;
+          border: none;
+          font-size: 24px;
+          cursor: pointer;
+          padding: 4px 8px;
+          border-radius: 6px;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: rotate(20deg);
+          }
+
+          &:active {
+            transform: rotate(180deg) scale(0.95);
+          }
+        }
+      }
+
       input {
         padding: 12px;
-        border: 2px solid #ecf0f1;
+        border: 2px solid rgba(255, 255, 255, 0.2);
         border-radius: 8px;
         font-size: 16px;
+        background: rgba(0, 0, 0, 0.3);
+        color: $text-primary;
 
         &:focus {
           outline: none;
           border-color: $primary-color;
+        }
+
+        &::placeholder {
+          color: $text-secondary;
         }
       }
 
@@ -116,9 +179,10 @@
   .info-text {
     margin-top: 20px;
     padding-top: 20px;
-    border-top: 1px solid #ecf0f1;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     color: $text-secondary;
     font-size: 14px;
     line-height: 1.5;
+    font-weight: 500;
   }
 }

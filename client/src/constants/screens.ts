@@ -6,6 +6,7 @@ export const SCREENS = {
   COUNTDOWN: 'countdown',
   GAME: 'game',
   ROUND_END: 'round-end',
+  PRE_STEAL_COUNTDOWN: 'pre-steal-countdown',
   LAST_WORD_STEAL: 'last-word-steal',
   DISPUTE: 'dispute',
   GAME_END: 'game-end',

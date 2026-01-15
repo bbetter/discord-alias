@@ -9,20 +9,28 @@ export const DisputeScreen: React.FC = () => {
   }
 
   const dispute = gameState.currentDispute;
-  const allPlayers = [
-    ...gameState.teams.teamA.players,
-    ...gameState.teams.teamB.players,
-  ];
+
+  // Determine teams
+  const wordTeam = gameState.teams[dispute.wordTeam];
+  const enemyTeam = dispute.wordTeam === 'teamA' ? gameState.teams.teamB : gameState.teams.teamA;
+  const enemyTeamPlayerIds = new Set(enemyTeam.players.map((p) => p.id));
+
+  // Check if current player is on the enemy team (can vote)
+  const isOnEnemyTeam = enemyTeamPlayerIds.has(currentPlayer.id);
 
   const hasVoted = dispute.votes[currentPlayer.id] !== undefined;
   const myVote = dispute.votes[currentPlayer.id];
   const isInitiator = dispute.initiatedBy.id === currentPlayer.id;
 
-  // Calculate vote counts
-  const voteCount = Object.keys(dispute.votes).length;
-  const totalPlayers = allPlayers.length;
-  const agreeCount = Object.values(dispute.votes).filter((v) => v === 'agree').length;
-  const disagreeCount = Object.values(dispute.votes).filter((v) => v === 'disagree').length;
+  // Calculate vote counts from enemy team only
+  const enemyVotes = Object.entries(dispute.votes).filter(([voterId]) =>
+    enemyTeamPlayerIds.has(voterId)
+  );
+  const voteCount = enemyVotes.length;
+  const totalEnemyPlayers = enemyTeam.players.length;
+  const requiredVotes = Math.ceil(totalEnemyPlayers / 2);
+  const agreeCount = enemyVotes.filter(([_, v]) => v === 'agree').length;
+  const disagreeCount = enemyVotes.filter(([_, v]) => v === 'disagree').length;
 
   return (
     <div className="screen active">
@@ -55,10 +63,17 @@ export const DisputeScreen: React.FC = () => {
 
         <div className="voting-section">
           <h3>
-            Голосування ({voteCount}/{totalPlayers})
+            Голосування команди {enemyTeam.name} ({voteCount}/{totalEnemyPlayers}, потрібно {requiredVotes})
           </h3>
 
-          {!hasVoted ? (
+          {!isOnEnemyTeam ? (
+            <div className="vote-status">
+              <p className="info-text">
+                Тільки команда {enemyTeam.name} може голосувати за слово команди {wordTeam.name}
+              </p>
+              <p className="waiting-text">Очікування голосів...</p>
+            </div>
+          ) : !hasVoted ? (
             <div className="vote-buttons">
               <button
                 className="btn btn-success btn-large"
@@ -87,13 +102,13 @@ export const DisputeScreen: React.FC = () => {
             <div className="vote-bar">
               <div
                 className="vote-segment agree"
-                style={{ width: `${(agreeCount / totalPlayers) * 100}%` }}
+                style={{ width: `${(agreeCount / totalEnemyPlayers) * 100}%` }}
               >
                 {agreeCount > 0 && agreeCount}
               </div>
               <div
                 className="vote-segment disagree"
-                style={{ width: `${(disagreeCount / totalPlayers) * 100}%` }}
+                style={{ width: `${(disagreeCount / totalEnemyPlayers) * 100}%` }}
               >
                 {disagreeCount > 0 && disagreeCount}
               </div>
@@ -101,7 +116,7 @@ export const DisputeScreen: React.FC = () => {
           </div>
 
           <div className="voters-list">
-            {allPlayers.map((player) => (
+            {enemyTeam.players.map((player) => (
               <div key={player.id} className="voter-item">
                 <span>{player.username}</span>
                 <span className={`vote-indicator ${dispute.votes[player.id] || 'pending'}`}>

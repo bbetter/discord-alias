@@ -3,6 +3,7 @@ import {
   createRoom,
   joinRoom,
   joinTeam,
+  configureGameSettings,
   startGame,
   waitForCountdown,
   isExplainer,
@@ -34,10 +35,16 @@ test.describe('Orchestrated Alias Game Test (Clean)', () => {
   });
 
   test.afterAll(async () => {
-    // Close all contexts
+    // Close all remaining contexts
+    console.log('\n🧹 Cleaning up remaining browser contexts...');
     for (const gc of gameContexts) {
-      await gc.context.close();
+      try {
+        await gc.context.close();
+      } catch (e) {
+        // Context may already be closed
+      }
     }
+    console.log('  ✓ Cleanup complete');
   });
 
   test('should complete full game with 4 players, disputes, and random actions', async () => {
@@ -48,6 +55,15 @@ test.describe('Orchestrated Alias Game Test (Clean)', () => {
     for (let i = 0; i < 4; i++) {
       const context = await browser.newContext();
       const page = await context.newPage();
+
+      // Listen to browser console
+      page.on('console', msg => {
+        const text = msg.text();
+        if (text.includes('[ROUND_ENDED]') || text.includes('[QUIT_CONFIRMED]') || text.includes('GameEndScreen')) {
+          console.log(`[Player ${i+1}]`, text);
+        }
+      });
+
       await page.goto('/');
 
       gameContexts.push({
@@ -95,7 +111,16 @@ test.describe('Orchestrated Alias Game Test (Clean)', () => {
     await hostPage.waitForTimeout(1000);
 
     // ======================
-    // STEP 4: Host starts game
+    // STEP 4: Configure game settings for quick game
+    // ======================
+    console.log('\n⚙️  Configuring game settings...');
+    await configureGameSettings(hostPage, {
+      pointsToWin: 15, // Low points to reach game end quickly
+    });
+    console.log('  ✓ Set pointsToWin to 15 for quick game end');
+
+    // ======================
+    // STEP 5: Host starts game
     // ======================
     console.log('\n🎮 Starting game...');
     await startGame(hostPage);
@@ -107,11 +132,11 @@ test.describe('Orchestrated Alias Game Test (Clean)', () => {
     console.log('  ✓ Countdown complete!');
 
     // ======================
-    // STEP 5: Play through rounds
+    // STEP 6: Play through rounds until game ends
     // ======================
-    const roundsToPlay = 3;
+    const maxRounds = 10; // Safety limit
 
-    for (let round = 0; round < roundsToPlay; round++) {
+    for (let round = 0; round < maxRounds; round++) {
       console.log(`\n${'='.repeat(50)}`);
       console.log(`🔄 ROUND ${round + 1}`);
       console.log('='.repeat(50));
@@ -139,26 +164,57 @@ test.describe('Orchestrated Alias Game Test (Clean)', () => {
       const wordsPlayed = await playRound(explainerPage, 50, 0.7);
       console.log(`  ✓ Played ${wordsPlayed} words`);
 
-      // Wait for round end
-      await waitForRoundEnd(hostPage);
-      console.log('\n📊 Round ended, showing results');
+      // Wait for either round end or game end (if team reached pointsToWin)
+      const result = await waitForRoundEnd(explainerPage);
 
-      // Display scores
+      if (result === 'game-end') {
+        console.log('\n🏆 Game Ended!');
+      } else {
+        console.log('\n📊 Round ended, showing results');
+      }
+
+      // Display scores (can check from any page, using host page for consistency)
       const scores = await getScores(hostPage);
       console.log(`  Team A: ${scores.teamA} | Team B: ${scores.teamB}`);
 
       // ======================
-      // STEP 6: Skip disputes for now (can add back later)
-      // ======================
-      // console.log('\n⚠️ Skipping disputes for this test run...');
-
-      // ======================
       // STEP 7: Check if game ended
       // ======================
-      if (await isGameEnded(hostPage)) {
+      if (result === 'game-end') {
         console.log('\n🏆 Game Ended!');
         const finalScores = await getScores(hostPage);
         console.log(`Final Score - Team A: ${finalScores.teamA} | Team B: ${finalScores.teamB}`);
+
+        // Close all windows except host (player 1)
+        console.log('\n🪟 Closing all windows except host...');
+        for (let i = 1; i < gameContexts.length; i++) {
+          await gameContexts[i].context.close();
+          console.log(`  ✓ Closed Player ${i + 1} window`);
+        }
+        console.log('  ✓ Host window remains open for verification');
+
+        // Wait a moment for the screen to fully render
+        await hostPage.waitForTimeout(1000);
+
+        // Take a screenshot of the GameEndScreen
+        await hostPage.screenshot({ path: 'test-results/game-end-screen.png', fullPage: true });
+        console.log('  📸 Screenshot saved to test-results/game-end-screen.png');
+
+        console.log('\n' + '='.repeat(50));
+        console.log('👁️  VERIFY GAMEENDSCREEN IS SHOWING CORRECTLY');
+        console.log('   Check the browser window for:');
+        console.log('   - Winner announcement');
+        console.log('   - Final scores');
+        console.log('   - Game statistics');
+        console.log('   - Host action buttons');
+        console.log('   OR check the screenshot at:');
+        console.log('   test-results/game-end-screen.png');
+        console.log('='.repeat(50));
+
+        // Wait for 30 seconds to allow manual verification
+        console.log('\n⏳ Waiting 30 seconds for verification...');
+        await hostPage.waitForTimeout(30000);
+
         break;
       }
 

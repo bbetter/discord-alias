@@ -1,9 +1,11 @@
 import express, { Request, Response } from 'express';
 import multer from 'multer';
 import { gameService, snapshotService } from '../index.js';
+import { sessionLoggerService } from '../services/SessionLoggerService.js';
 import { WordPackService } from '../services/WordPackService.js';
 import { reloadWordBank } from '../word-loader.js';
 import type { WordPack } from '../../shared/types/wordpack.js';
+import type { LogFilter } from '../../shared/types/logging.js';
 
 const router = express.Router();
 const wordPackService = new WordPackService();
@@ -171,6 +173,21 @@ router.delete('/wordpacks/:id', (req: Request, res: Response) => {
   res.json({ success: true, message: 'Word pack deleted' });
 });
 
+// Download word pack as .wordspack file
+router.get('/wordpacks/:id/download', (req: Request, res: Response) => {
+  const wordPack = wordPackService.getWordPack(req.params.id);
+  if (!wordPack) {
+    return res.status(404).json({ error: 'Word pack not found' });
+  }
+
+  const filename = `${wordPack.metadata.name || req.params.id}.wordspack`;
+  const content = JSON.stringify(wordPack, null, 2);
+
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.send(content);
+});
+
 // Export word pack to .txt format
 router.get('/wordpacks/:id/export-txt', (req: Request, res: Response) => {
   const txt = wordPackService.exportToTxt(req.params.id);
@@ -184,6 +201,65 @@ router.get('/wordpacks/:id/export-txt', (req: Request, res: Response) => {
   res.setHeader('Content-Type', 'text/plain; charset=utf-8');
   res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
   res.send(txt);
+});
+
+// === Logging Endpoints ===
+
+// List all session log files
+router.get('/logs/sessions', async (_req: Request, res: Response) => {
+  try {
+    const sessions = await sessionLoggerService.listSessions();
+    res.json(sessions);
+  } catch (error) {
+    res.status(500).json({
+      error: 'Failed to list session logs',
+      details: error instanceof Error ? error.message : 'Unknown error',
+    });
+  }
+});
+
+// Get logs for a specific game session
+router.get('/logs/sessions/:gameId', async (req: Request, res: Response) => {
+  try {
+    const { gameId } = req.params;
+    const filter: LogFilter = {
+      level: (req.query.level as any) || 'all',
+      tag: (req.query.tag as any) || 'all',
+      startTime: req.query.startTime ? new Date(req.query.startTime as string) : undefined,
+      endTime: req.query.endTime ? new Date(req.query.endTime as string) : undefined,
+      search: req.query.search as string,
+      playerId: req.query.playerId as string,
+      limit: req.query.limit ? parseInt(req.query.limit as string) : undefined,
+      offset: req.query.offset ? parseInt(req.query.offset as string) : undefined,
+    };
+
+    const logs = await sessionLoggerService.getSessionLogs(gameId, filter);
+    res.json(logs);
+  } catch (error) {
+    res.status(500).json({
+      error: 'Failed to load session logs',
+      details: error instanceof Error ? error.message : 'Unknown error',
+    });
+  }
+});
+
+// Delete session log file
+router.delete('/logs/sessions/:gameId', async (req: Request, res: Response) => {
+  try {
+    const { gameId } = req.params;
+    const success = await sessionLoggerService.deleteSession(gameId);
+
+    if (success) {
+      res.json({ message: 'Session log deleted successfully' });
+    } else {
+      res.status(500).json({ error: 'Failed to delete session log' });
+    }
+  } catch (error) {
+    res.status(500).json({
+      error: 'Failed to delete session log',
+      details: error instanceof Error ? error.message : 'Unknown error',
+    });
+  }
 });
 
 export default router;

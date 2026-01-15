@@ -1,0 +1,76 @@
+// Round Progress Dots
+.round-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0;
+
+  .round-progress-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: $text-secondary;
+  }
+
+  .round-progress-dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    .progress-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+
+      &.active {
+        width: 16px;
+        height: 16px;
+        background: $primary-color;
+        box-shadow: 0 0 8px rgba(88, 101, 242, 0.5);
+        animation: pulse-dot 1.5s ease-in-out infinite;
+      }
+
+      &.completed {
+        background: $success-color;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .round-progress-label {
+      font-size: 12px;
+    }
+
+    .round-progress-dots {
+      gap: 6px;
+
+      .progress-dot {
+        width: 10px;
+        height: 10px;
+
+        &.active {
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}

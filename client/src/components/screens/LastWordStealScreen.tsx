@@ -17,11 +17,14 @@ export const LastWordStealScreen: React.FC = () => {
   const stealingTeam = gameState.teams[lastWordSteal.stealingTeam];
   const originalTeam = gameState.teams[lastWordSteal.originalTeam];
   const isOnStealingTeam = stealingTeam.players.some(p => p.id === currentPlayer?.id);
+  const isOriginalExplainer = gameState.currentRound?.explainer.id === currentPlayer?.id;
+  const isWordHidden = lastWordSteal.word === '***';
 
   return (
     <div className="screen active">
       <div className="last-word-steal-container">
-        <div className="steal-header">
+        <div className="steal-content">
+          <div className="steal-header">
           <h1>🎯 Останнє слово!</h1>
           <div className="steal-timer">
             <div className="timer-circle">
@@ -39,10 +42,23 @@ export const LastWordStealScreen: React.FC = () => {
         </div>
 
         <div className="steal-word-display">
-          <div className="word-card steal-word">
-            <span className="word">{lastWordSteal.word}</span>
-            <span className="difficulty">{lastWordSteal.difficulty}</span>
-          </div>
+          {isWordHidden ? (
+            <div className="word-card steal-word steal-word-hidden">
+              <div className="hidden-word-animation">
+                <span className="question-mark">?</span>
+                <span className="question-mark">?</span>
+                <span className="question-mark">?</span>
+              </div>
+              <span className="hidden-label">
+                {isOnStealingTeam ? 'Вгадайте слово!' : 'Слово приховано'}
+              </span>
+            </div>
+          ) : (
+            <div className="word-card steal-word">
+              <span className="word">{lastWordSteal.word}</span>
+              <span className="difficulty">{lastWordSteal.difficulty}</span>
+            </div>
+          )}
         </div>
 
         {isOnStealingTeam && (
@@ -62,9 +78,16 @@ export const LastWordStealScreen: React.FC = () => {
           </div>
         )}
 
-        {!isOnStealingTeam && (
+        {!isOnStealingTeam && !isOriginalExplainer && (
           <div className="steal-waiting">
             <p>Чекаємо на відповідь команди {stealingTeam.name}...</p>
+          </div>
+        )}
+
+        {isOriginalExplainer && (
+          <div className="steal-explainer-warning">
+            <span className="warning-icon">🤫</span>
+            <p>Мовчіть! Суперники вгадують без підказок!</p>
           </div>
         )}
 
@@ -77,6 +100,7 @@ export const LastWordStealScreen: React.FC = () => {
             <span className="team-name">{gameState.teams.teamB.name}</span>
             <span className="score">{gameState.teams.teamB.score}</span>
           </div>
+        </div>
         </div>
       </div>
     </div>

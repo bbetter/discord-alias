@@ -1,8 +1,7 @@
 .countdown-container {
-  background: white;
-  border-radius: 16px;
+  background: $surface-color;
+  border-radius: 8px;
   padding: 60px 40px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   max-width: 600px;
   width: 100%;
   text-align: center;
@@ -13,18 +12,20 @@
 
   .countdown-team-badge {
     padding: 16px 40px;
-    border-radius: 12px;
+    border-radius: 8px;
     font-size: 28px;
-    font-weight: 700;
+    font-weight: 900;
     color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    border: 3px solid transparent;
 
     &.team-a {
-      background: linear-gradient(135deg, #4a90e2, #357abd);
+      background: rgba(59, 130, 246, 0.3);
+      border-color: $team-a-color;
     }
 
     &.team-b {
-      background: linear-gradient(135deg, #e94b3c, #c62828);
+      background: rgba(239, 68, 68, 0.3);
+      border-color: $team-b-color;
     }
 
     .team-name {
@@ -45,8 +46,8 @@
     }
 
     .explainer-name {
-      font-size: 32px;
-      font-weight: 700;
+      font-size: 36px;
+      font-weight: 900;
       color: $text-primary;
     }
   }
@@ -60,14 +61,14 @@
     justify-content: center;
 
     .countdown-text {
-      font-size: 42px;
-      font-weight: 700;
-      color: $primary-color;
+      font-size: 48px;
+      font-weight: 900;
+      color: $text-primary;
       animation: pulse 0.8s ease-in-out;
     }
 
     .countdown-number {
-      font-size: 120px;
+      font-size: 140px;
       font-weight: 900;
       color: $primary-color;
       line-height: 1;
@@ -78,10 +79,11 @@
   .countdown-hint {
     font-size: 20px;
     color: $text-secondary;
-    font-weight: 500;
+    font-weight: 600;
     padding: 20px;
-    background: #f8f9fa;
-    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
     max-width: 400px;
   }
 }

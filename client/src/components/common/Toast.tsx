@@ -2,9 +2,23 @@ import React, { useEffect, useState } from 'react';
 
 interface ToastProps {
   message: string | null;
-  type?: 'error' | 'info';
+  type?: 'error' | 'info' | 'success' | 'warning';
   duration?: number;
 }
+
+const getToastEmoji = (type: string) => {
+  switch (type) {
+    case 'success':
+      return '✅';
+    case 'error':
+      return '❌';
+    case 'warning':
+      return '⚠️';
+    case 'info':
+    default:
+      return 'ℹ️';
+  }
+};
 
 export const Toast: React.FC<ToastProps> = React.memo(({ message, type = 'error', duration = 3000 }) => {
   const [show, setShow] = useState(false);
@@ -26,7 +40,8 @@ export const Toast: React.FC<ToastProps> = React.memo(({ message, type = 'error'
 
   return (
     <div className={`toast ${show ? 'show' : ''} toast-${type}`}>
-      {message}
+      <span className="toast-icon">{getToastEmoji(type)}</span>
+      <span className="toast-message">{message}</span>
     </div>
   );
 });

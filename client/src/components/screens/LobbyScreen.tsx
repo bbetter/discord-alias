@@ -12,7 +12,6 @@ export const LobbyScreen: React.FC = () => {
     isHost,
     quitWarnings,
     showQuitDialog,
-    showCloseDialog,
     availableCategories,
     selectTeam,
     renameTeam,
@@ -20,14 +19,14 @@ export const LobbyScreen: React.FC = () => {
     startGame,
     quitGame,
     confirmQuit,
-    closeActivity,
-    confirmCloseActivity,
   } = useGame();
 
   const [editingTeam, setEditingTeam] = useState<'teamA' | 'teamB' | null>(null);
   const [teamNameInput, setTeamNameInput] = useState('');
 
-  if (!gameState) return null;
+  if (!gameState) {
+    return <div className="screen active">Завантаження лобі...</div>;
+  }
 
   const handleSettingChange = (key: string, value: any) => {
     updateSettings({ [key]: value });
@@ -134,148 +133,164 @@ export const LobbyScreen: React.FC = () => {
   return (
     <div className="screen active">
       <div className="lobby-container">
-        <button className="btn btn-danger btn-quit" onClick={quitGame}>
-          Вийти з гри
-        </button>
-
-        {roomCode && (
+        <div className="lobby-header">
           <div className="room-code-display">
-            <span>Код кімнати:</span>
-            <strong>{roomCode}</strong>
+            {roomCode && (
+              <>
+                <span>Код кімнати:</span>
+                <strong>{roomCode}</strong>
+              </>
+            )}
           </div>
-        )}
-
-        <h1>🎮 Alias</h1>
-        <p className="subtitle">Гра в пояснення слів</p>
-
-        {isHost && (
-          <div className="connected-players-container">
-            <h3>
-              Підключені гравці (<span>{allPlayers.length}</span>)
-            </h3>
-            <div className="connected-players-list">
-              {allPlayers.length === 0 ? (
-                <p className="empty-team">Чекаємо гравців...</p>
-              ) : (
-                allPlayers.map((player) => (
-                  <PlayerCard key={player.id} player={player} />
-                ))
-              )}
-            </div>
-          </div>
-        )}
-
-        <div className="teams-container">
-          {renderTeam('teamA', gameState.teams.teamA)}
-          {renderTeam('teamB', gameState.teams.teamB)}
         </div>
 
-        {isHost && (
-          <div className="settings-container">
-            <h3>Налаштування гри</h3>
-            <div className="settings-grid">
-              <div className="setting">
-                <label>Час раунду:</label>
-                <select
-                  value={gameState.settings.roundTime}
-                  onChange={(e) =>
-                    handleSettingChange('roundTime', parseInt(e.target.value))
-                  }
-                >
-                  <option value="30">30 секунд</option>
-                  <option value="60">60 секунд</option>
-                  <option value="90">90 секунд</option>
-                  <option value="120">120 секунд</option>
-                </select>
-              </div>
-              <div className="setting">
-                <label>Категорія:</label>
-                <select
-                  value={gameState.settings.category}
-                  onChange={(e) => handleSettingChange('category', e.target.value)}
-                >
-                  {availableCategories.map((category) => (
-                    <option key={category} value={category}>
-                      {category.charAt(0).toUpperCase() + category.slice(1)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="setting">
-                <label>Складність:</label>
-                <select
-                  value={gameState.settings.difficulty}
-                  onChange={(e) =>
-                    handleSettingChange('difficulty', e.target.value)
-                  }
-                >
-                  <option value="змішані">Змішана</option>
-                  <option value="легкі">Легкі</option>
-                  <option value="середні">Середні</option>
-                  <option value="складні">Складні</option>
-                </select>
-              </div>
-              <div className="setting">
-                <label>Очки для перемоги:</label>
-                <input
-                  type="number"
-                  value={gameState.settings.pointsToWin}
-                  onChange={(e) =>
-                    handleSettingChange('pointsToWin', parseInt(e.target.value))
-                  }
-                  min="10"
-                  max="100"
-                  step="5"
-                />
-              </div>
-              <div className="setting">
-                <label>Штраф за пропущені слова: {gameState.settings.skipPenalty === 0 ? 'Немає' : `${gameState.settings.skipPenalty} очко`}</label>
-                <input
-                  type="range"
-                  value={gameState.settings.skipPenalty}
-                  onChange={(e) =>
-                    handleSettingChange('skipPenalty', parseInt(e.target.value))
-                  }
-                  min="-5"
-                  max="0"
-                  step="1"
-                  className="slider"
-                />
-              </div>
-              <div className="setting setting-checkbox">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={gameState.settings.lastWordStealEnabled}
-                    onChange={(e) =>
-                      handleSettingChange('lastWordStealEnabled', e.target.checked)
-                    }
-                  />
-                  <span>Останнє слово можна перехопити (15 сек)</span>
-                </label>
+        <div className="lobby-content">
+          <h1>🎮 Alias</h1>
+          <p className="subtitle">Гра в пояснення слів</p>
+
+          {isHost && (
+            <div className="connected-players-container">
+              <h3>
+                Підключені гравці (<span>{allPlayers.length}</span>)
+              </h3>
+              <div className="connected-players-list">
+                {allPlayers.length === 0 ? (
+                  <p className="empty-team">Чекаємо гравців...</p>
+                ) : (
+                  allPlayers.map((player) => (
+                    <PlayerCard key={player.id} player={player} />
+                  ))
+                )}
               </div>
             </div>
+          )}
+
+          <div className="teams-container">
+            {renderTeam('teamA', gameState.teams.teamA)}
+            {renderTeam('teamB', gameState.teams.teamB)}
           </div>
-        )}
 
-        {isHost && (
-          <button
-            className="btn btn-primary btn-large"
-            onClick={startGame}
-            disabled={!canStart}
-            title={
-              !canStart ? 'Потрібно мінімум 2 гравці в кожній команді' : ''
-            }
-          >
-            Почати гру
-          </button>
-        )}
+          {isHost && (
+            <div className="settings-container">
+              <h3>Налаштування гри</h3>
+              <div className="settings-grid">
+                <div className="setting">
+                  <label>Час раунду:</label>
+                  <select
+                    value={gameState.settings.roundTime}
+                    onChange={(e) =>
+                      handleSettingChange('roundTime', parseInt(e.target.value))
+                    }
+                  >
+                    <option value="30">30 секунд</option>
+                    <option value="60">60 секунд</option>
+                    <option value="90">90 секунд</option>
+                    <option value="120">120 секунд</option>
+                  </select>
+                </div>
+                <div className="setting">
+                  <label>Категорія:</label>
+                  <select
+                    value={gameState.settings.category}
+                    onChange={(e) => handleSettingChange('category', e.target.value)}
+                  >
+                    {availableCategories.map((category) => (
+                      <option key={category} value={category}>
+                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="setting">
+                  <label>Складність:</label>
+                  <select
+                    value={gameState.settings.difficulty}
+                    onChange={(e) =>
+                      handleSettingChange('difficulty', e.target.value)
+                    }
+                  >
+                    <option value="змішані">Змішана</option>
+                    <option value="легкі">Легкі</option>
+                    <option value="середні">Середні</option>
+                    <option value="складні">Складні</option>
+                  </select>
+                </div>
+                <div className="setting">
+                  <label>Очки для перемоги:</label>
+                  <input
+                    type="number"
+                    value={gameState.settings.pointsToWin}
+                    onChange={(e) =>
+                      handleSettingChange('pointsToWin', parseInt(e.target.value))
+                    }
+                    min="10"
+                    max="100"
+                    step="5"
+                  />
+                </div>
+                <div className="setting">
+                  <label>Штраф за пропущені слова: {gameState.settings.skipPenalty === 0 ? 'Немає' : `${gameState.settings.skipPenalty} очко`}</label>
+                  <input
+                    type="range"
+                    value={gameState.settings.skipPenalty}
+                    onChange={(e) =>
+                      handleSettingChange('skipPenalty', parseInt(e.target.value))
+                    }
+                    min="-5"
+                    max="0"
+                    step="1"
+                    className="slider"
+                  />
+                </div>
+                <div className="setting setting-full-width">
+                  <label>Режим гри:</label>
+                  <select
+                    value={gameState.settings.gameMode}
+                    onChange={(e) =>
+                      handleSettingChange('gameMode', e.target.value)
+                    }
+                    className="game-mode-select"
+                  >
+                    <option value="simple">Простий</option>
+                    <option value="steal">Перехоплення слова</option>
+                  </select>
+                  <div className="mode-explanation">
+                    {gameState.settings.gameMode === 'simple' ? (
+                      <p>
+                        <strong>Простий режим:</strong> Усі слова, які пояснюються, бачать і команда, що пояснює,
+                        і команда суперників. Це класичний режим гри Alias.
+                      </p>
+                    ) : (
+                      <p>
+                        <strong>Режим перехоплення:</strong> Команда суперників не бачить слів під час раунду.
+                        Якщо останнє слово не було відгадане до завершення часу, команда суперників отримує
+                        15 секунд, щоб спробувати відгадати його і заробити додаткове очко.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
-        {isHost && (
-          <button className="btn btn-danger btn-close-activity" onClick={closeActivity}>
-            Закрити активність
-          </button>
-        )}
+          <div className="lobby-bottom-actions">
+            {isHost && (
+              <button
+                className="btn btn-primary btn-large"
+                onClick={startGame}
+                disabled={!canStart}
+                title={
+                  !canStart ? 'Потрібно мінімум 2 гравці в кожній команді' : ''
+                }
+              >
+                Почати гру
+              </button>
+            )}
+            <button className="btn btn-danger" onClick={quitGame}>
+              Вийти з гри
+            </button>
+          </div>
+        </div>
 
         <ConfirmationDialog
           isOpen={showQuitDialog}
@@ -286,17 +301,6 @@ export const LobbyScreen: React.FC = () => {
           confirmStyle="danger"
           onConfirm={() => confirmQuit(true)}
           onCancel={() => confirmQuit(false)}
-        />
-
-        <ConfirmationDialog
-          isOpen={showCloseDialog}
-          title="Закрити активність?"
-          message="Ви впевнені, що хочете закрити цю гру? Всі гравці будуть відключені, а гра буде видалена."
-          confirmText="Закрити гру"
-          cancelText="Скасувати"
-          confirmStyle="danger"
-          onConfirm={() => confirmCloseActivity(true)}
-          onCancel={() => confirmCloseActivity(false)}
         />
       </div>
     </div>

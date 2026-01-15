@@ -1,8 +1,12 @@
 import { Server as SocketIOServer, Socket } from 'socket.io';
 import { GameService } from '../services/GameService.js';
 import { SnapshotService } from '../services/SnapshotService.js';
+import { sessionLoggerService } from '../services/SessionLoggerService.js';
+import { createLogger } from '../utils/logger.js';
 import { getCategories } from '../word-loader.js';
 import type { GameState, Player, TeamId, WordStatus } from '../../shared/types/game.js';
+
+const serverLogger = createLogger('SOCKET');
 
 interface JoinGameData {
   gameId: string;
@@ -63,7 +67,11 @@ export class SocketHandler {
 
   setupHandlers(io: SocketIOServer): void {
     io.on('connection', (socket: Socket) => {
-      console.log('Client connected:', socket.id);
+      serverLogger.info({
+        tag: 'SOCKET',
+        socketId: socket.id,
+        action: 'client_connected',
+      }, '[SOCKET] Client connected');
 
       let currentPlayer: Player | null = null;
       let currentGameId: string | null = null;
@@ -74,7 +82,12 @@ export class SocketHandler {
           const categories = getCategories();
           socket.emit('categories', categories);
         } catch (error) {
-          console.error('Error getting categories:', error);
+          serverLogger.error({
+            tag: 'ERROR',
+            socketId: socket.id,
+            error: error instanceof Error ? error.message : 'Unknown error',
+            action: 'get_categories_error',
+          }, '[ERROR] Error getting categories');
           socket.emit('categories', ['змішані', 'різне']); // Fallback
         }
       });
@@ -92,12 +105,12 @@ export class SocketHandler {
         socket.join(gameId);
 
         let game = this.gameService.getGameState(gameId);
+        const logger = sessionLoggerService.getLogger(gameId);
+
         if (!game) {
           game = this.gameService.createGame(gameId, player.id);
-          console.log(`✨ New game created! Host: ${player.username} (${player.id})`);
-        } else {
-          console.log(`📥 Player joining existing game. Host: ${game.host}`);
         }
+
         game.presence[player.id] = {
           connected: true,
           lastSeen: new Date().toISOString(),
@@ -105,8 +118,17 @@ export class SocketHandler {
 
         this.snapshotService.saveSnapshot(game);
 
-        console.log(`👤 Player ${player.username} (${player.id}) joined game ${gameId}`);
-        console.log(`🎮 Game state - host: ${game.host}, status: ${game.status}`);
+        if (logger) {
+          logger.info({
+            tag: 'PLAYER',
+            gameId,
+            playerId: player.id,
+            username: player.username,
+            socketId: socket.id,
+            isHost: game.host === player.id,
+            action: 'player_joined',
+          }, `[PLAYER] ${player.username} joined game`);
+        }
 
         this.broadcastGameState(io, gameId, game, 'player-joined', { player });
       });
@@ -321,6 +343,8 @@ export class SocketHandler {
         const game = this.gameService.leaveTeam(gameId, currentPlayer.id);
 
         if (game) {
+          const logger = sessionLoggerService.getLogger(gameId);
+
           // Update presence
           if (game.presence[currentPlayer.id]) {
             game.presence[currentPlayer.id].connected = false;
@@ -329,6 +353,18 @@ export class SocketHandler {
 
           // Save snapshot
           this.snapshotService.saveSnapshot(game);
+
+          if (logger) {
+            logger.info({
+              tag: 'PLAYER',
+              gameId,
+              playerId: currentPlayer.id,
+              username: currentPlayer.username,
+              wasExplainer: warnings?.isCurrentExplainer || false,
+              teamBelowMinimum: warnings?.teamBelowMinimum || false,
+              action: 'player_quit',
+            }, `[PLAYER] ${currentPlayer.username} quit the game`);
+          }
 
           // If explainer quit during round or countdown, end the round early
           if (warnings?.isCurrentExplainer && (game.status === 'countdown' || game.status === 'playing')) {
@@ -492,6 +528,18 @@ export class SocketHandler {
         }
 
         this.snapshotService.saveSnapshot(game);
+
+        const logger = sessionLoggerService.getLogger(currentGameId);
+        if (logger) {
+          logger.info({
+            tag: 'SOCKET',
+            gameId: currentGameId,
+            playerId: currentPlayer.id,
+            username: currentPlayer.username,
+            socketId: socket.id,
+            action: 'client_disconnected',
+          }, `[SOCKET] ${currentPlayer.username} disconnected`);
+        }
       });
     });
   }
@@ -502,13 +550,39 @@ export class SocketHandler {
     if (sanitized.currentRound) {
       const isExplainer = sanitized.currentRound.explainer.id === playerId;
 
+      // Determine if player is on the current team
+      const currentTeam = sanitized.teams[sanitized.currentRound.team];
+      const isOnCurrentTeam = currentTeam.players.some(p => p.id === playerId);
+      const isOpponent = !isOnCurrentTeam;
+
       sanitized.currentRound = { ...sanitized.currentRound };
 
-      if (!isExplainer) {
+      // Hide words based on game mode and player role:
+      // - Explainer always sees words
+      // - Team members (non-explainers) never see words
+      // - In "simple" mode: opponents see words
+      // - In "steal" mode: opponents don't see words
+      const shouldHideWords = !isExplainer &&
+        (isOnCurrentTeam || sanitized.settings.gameMode === 'steal');
+
+      if (shouldHideWords) {
         sanitized.currentRound.cards = sanitized.currentRound.cards.map((card) => ({
           ...card,
           word: '***',
         }));
+      }
+    }
+
+    // Hide last word steal word from everyone except the original explainer
+    // The original explainer is the one who was explaining when time ran out
+    if (sanitized.lastWordSteal && sanitized.currentRound) {
+      const isOriginalExplainer = sanitized.currentRound.explainer.id === playerId;
+
+      if (!isOriginalExplainer) {
+        sanitized.lastWordSteal = {
+          ...sanitized.lastWordSteal,
+          word: '***',
+        };
       }
     }
 
@@ -563,12 +637,51 @@ export class SocketHandler {
 
         const endedGame = this.gameService.endRound(gameId);
         if (endedGame) {
-          if (endedGame.status === 'last-word-steal') {
-            this.broadcastGameState(io, gameId, endedGame, 'last-word-steal-started');
-            this.startLastWordStealTimer(io, gameId);
+          if (endedGame.status === 'pre-steal-countdown') {
+            this.broadcastGameState(io, gameId, endedGame, 'pre-steal-countdown-started');
+            this.startPreStealCountdownTimer(io, gameId);
           } else {
             this.broadcastGameState(io, gameId, endedGame, 'round-ended');
           }
+        }
+      }
+    }, 1000);
+  }
+
+  private startPreStealCountdownTimer(io: SocketIOServer, gameId: string): void {
+    const game = this.gameService.getGameState(gameId);
+    if (!game || !game.lastWordSteal) {
+      return;
+    }
+
+    const startTime = Date.now();
+    const countdownDuration = 5; // 5 seconds countdown
+
+    const intervalId = setInterval(() => {
+      const currentGame = this.gameService.getGameState(gameId);
+
+      if (!currentGame || !currentGame.lastWordSteal || currentGame.status !== 'pre-steal-countdown') {
+        clearInterval(intervalId);
+        return;
+      }
+
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const timeRemaining = countdownDuration - elapsed;
+
+      currentGame.lastWordSteal.preStealCountdown = Math.max(0, timeRemaining);
+
+      io.to(gameId).emit('pre-steal-countdown-update', {
+        timeRemaining: currentGame.lastWordSteal.preStealCountdown,
+      });
+
+      if (currentGame.lastWordSteal.preStealCountdown <= 0) {
+        clearInterval(intervalId);
+
+        // Transition to last word steal
+        const stealGame = this.gameService.startLastWordSteal(gameId);
+        if (stealGame) {
+          this.broadcastGameState(io, gameId, stealGame, 'last-word-steal-started');
+          this.startLastWordStealTimer(io, gameId);
         }
       }
     }, 1000);

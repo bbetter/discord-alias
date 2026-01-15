@@ -5,9 +5,51 @@ interface GuestLoginScreenProps {
   onLogin: (name: string) => void;
 }
 
+const FUNNY_NAMES = [
+  'Капітан Очевидність',
+  'Професор Непомітність',
+  'Король Драм',
+  'Магістр Плутанини',
+  'Сир Втрачений',
+  'Лорд Непередбачуваний',
+  'Герцог Гумору',
+  'Барон Безладдя',
+  'Віконт Веселощів',
+  'Граф Сміху',
+  'Маркіз Містики',
+  'Принц Парадоксів',
+  'Султан Сарказму',
+  'Шах Шаленства',
+  'Цар Хаосу',
+  'Імператор Епіку',
+  'Рицар Рандому',
+  'Майстер Мемів',
+  'Сенсей Смішного',
+  'Гуру Гумору',
+  'Ніндзя Нісенітниць',
+  'Самурай Сміху',
+  'Спартанець Жартів',
+  'Вікінг Веселощів',
+  'Піратський Пан',
+  'Космонавт Казусів',
+  'Детектив Дотепу',
+  'Агент Абсурду',
+  'Шпигун Шуток',
+  'Маг Метушні',
+];
+
+const getRandomName = () => {
+  return FUNNY_NAMES[Math.floor(Math.random() * FUNNY_NAMES.length)];
+};
+
 export const GuestLoginScreen: React.FC<GuestLoginScreenProps> = ({ onLogin }) => {
   const [name, setName] = useState(getGuestName() || '');
   const [error, setError] = useState('');
+
+  const handleRandomize = () => {
+    setName(getRandomName());
+    setError('');
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,18 +84,28 @@ export const GuestLoginScreen: React.FC<GuestLoginScreenProps> = ({ onLogin }) =
         <form className="guest-login-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="guest-name">Введіть ваше ім'я</label>
-            <input
-              id="guest-name"
-              type="text"
-              placeholder="Ваше ім'я"
-              maxLength={20}
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                setError('');
-              }}
-              autoFocus
-            />
+            <div className="input-with-icon">
+              <input
+                id="guest-name"
+                type="text"
+                placeholder="Ваше ім'я"
+                maxLength={20}
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setError('');
+                }}
+                autoFocus
+              />
+              <button
+                type="button"
+                className="randomize-btn"
+                onClick={handleRandomize}
+                title="Випадкове ім'я"
+              >
+                🎲
+              </button>
+            </div>
             {error && <p className="error-text">{error}</p>}
           </div>
 

@@ -214,6 +214,16 @@ const AdminApp: React.FC = () => {
     }
   };
 
+  const handleDownloadWordPack = (id: string, name: string) => {
+    const url = `${import.meta.env.VITE_ADMIN_API_URL}/admin/api/wordpacks/${id}/download`;
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${name}.wordspack`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleAddWord = () => {
     if (!editingWordPack) return;
 
@@ -542,16 +552,28 @@ const AdminApp: React.FC = () => {
                               </>
                             )}
                           </div>
-                          <button
-                            className="btn btn-danger btn-sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeleteWordPack(pack.id);
-                            }}
-                            title="Delete word pack"
-                          >
-                            🗑️
-                          </button>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button
+                              className="btn btn-primary btn-sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDownloadWordPack(pack.id, pack.metadata.name);
+                              }}
+                              title="Download word pack"
+                            >
+                              📥
+                            </button>
+                            <button
+                              className="btn btn-danger btn-sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteWordPack(pack.id);
+                              }}
+                              title="Delete word pack"
+                            >
+                              🗑️
+                            </button>
+                          </div>
                         </li>
                       ))
                     )}

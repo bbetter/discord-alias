@@ -53,7 +53,7 @@ export const DiscordProvider: React.FC<DiscordProviderProps> = ({ children }) =>
           setAuth({
             access_token: 'mock-token',
             user: mockUser,
-            scopes: ['identify', 'guilds'],
+            scopes: ['identify', 'guilds', 'rpc.voice.read'],
             expires: new Date(Date.now() + 86400000).toISOString(),
             application: {
               id: 'mock-app',
@@ -83,7 +83,7 @@ export const DiscordProvider: React.FC<DiscordProviderProps> = ({ children }) =>
           response_type: 'code',
           state: '',
           prompt: 'none',
-          scope: ['identify', 'guilds'],
+          scope: ['identify', 'guilds', 'rpc.voice.read'],
         });
 
         console.log('[Discord] Authorization code received, exchanging for token...');

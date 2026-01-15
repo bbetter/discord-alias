@@ -37,6 +37,8 @@ export const SOCKET_EVENTS = {
   DISPUTE_VOTE_RECORDED: 'dispute-vote-recorded',
   DISPUTE_RESOLVED: 'dispute-resolved',
   DISPUTE_ERROR: 'dispute-error',
+  PRE_STEAL_COUNTDOWN_STARTED: 'pre-steal-countdown-started',
+  PRE_STEAL_COUNTDOWN_UPDATE: 'pre-steal-countdown-update',
   LAST_WORD_STEAL_STARTED: 'last-word-steal-started',
   STEAL_TIMER_UPDATE: 'steal-timer-update',
 } as const;

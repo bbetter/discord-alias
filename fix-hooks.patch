@@ -1,0 +1,30 @@
+diff --git a/src/components/screens/RoundEndScreen.tsx b/src/components/screens/RoundEndScreen.tsx
+index XXXXX..YYYYY 100644
+--- a/src/components/screens/RoundEndScreen.tsx
++++ b/src/components/screens/RoundEndScreen.tsx
+@@
+-  if (!gameState || !gameState.history.length) {
+-    console.log('[ROUND_ENDED] RoundEndScreen returning null - no gameState or history');
+-    return null;
+-  }
++  if (!gameState) {
++    return <div className="screen active">Завантаження...</div>;
++  }
++
++  if (!gameState.history.length) {
++    return <div className="screen active">Результати обробляються...</div>;
++  }
+
+diff --git a/src/components/screens/GameEndScreen.tsx b/src/components/screens/GameEndScreen.tsx
+index AAAAA..BBBBB 100644
+--- a/src/components/screens/GameEndScreen.tsx
++++ b/src/components/screens/GameEndScreen.tsx
+@@
+-  if (!gameState) {
+-    console.log('[ROUND_ENDED] GameEndScreen returning null - no gameState');
+-    return null;
+-  }
++  if (!gameState) {
++    return <div className="screen active">Гру завершуємо...</div>;
++  }
+

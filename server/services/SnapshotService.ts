@@ -1,7 +1,10 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createLogger } from '../utils/logger.js';
 import type { GameState } from '../../shared/types/game.js';
+
+const logger = createLogger('GAME');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -54,8 +57,13 @@ export class SnapshotService {
       await fs.rename(tmp, file);
     } catch (error) {
       const err = error as Error;
-      console.error(`[SnapshotService] Atomic save failed for ${game.gameId}:`, err.message);
-      console.error(`[SnapshotService] Live directory: ${this.liveDir}`);
+      logger.error({
+        tag: 'ERROR',
+        gameId: game.gameId,
+        error: err.message,
+        liveDir: this.liveDir,
+        action: 'snapshot_atomic_save_failed',
+      }, `[ERROR] Atomic save failed for ${game.gameId}`);
 
       // Clean up temp file if it exists
       try {
@@ -70,7 +78,12 @@ export class SnapshotService {
         await this.ensureDir();
         await fs.writeFile(file, JSON.stringify(payload, null, 2), 'utf8');
       } catch (writeError) {
-        console.error('[SnapshotService] Failed to write snapshot file:', writeError);
+        logger.error({
+          tag: 'ERROR',
+          gameId: game.gameId,
+          error: writeError instanceof Error ? writeError.message : 'Unknown error',
+          action: 'snapshot_write_failed',
+        }, '[ERROR] Failed to write snapshot file');
         throw writeError;
       }
     }
@@ -116,9 +129,18 @@ export class SnapshotService {
     try {
       const data = await fs.readFile(sourceFile, 'utf8');
       await fs.writeFile(archiveFile, data, 'utf8');
-      console.log(`[SnapshotService] Archived game ${gameId}`);
+      logger.info({
+        tag: 'GAME',
+        gameId,
+        action: 'snapshot_archived',
+      }, `[GAME] Snapshot archived: ${gameId}`);
     } catch (error) {
-      console.error(`[SnapshotService] Failed to archive ${gameId}:`, error);
+      logger.error({
+        tag: 'ERROR',
+        gameId,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        action: 'snapshot_archive_failed',
+      }, `[ERROR] Failed to archive snapshot: ${gameId}`);
     }
   }
 
@@ -138,7 +160,11 @@ export class SnapshotService {
 
       return snapshots;
     } catch (error) {
-      console.error('[SnapshotService] Failed to load archived snapshots:', error);
+      logger.error({
+        tag: 'ERROR',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        action: 'load_archived_snapshots_failed',
+      }, '[ERROR] Failed to load archived snapshots');
       return [];
     }
   }

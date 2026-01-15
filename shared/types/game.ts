@@ -1,6 +1,7 @@
-export type GameStatus = 'lobby' | 'countdown' | 'playing' | 'round-end' | 'last-word-steal' | 'dispute' | 'finished';
+export type GameStatus = 'lobby' | 'countdown' | 'playing' | 'round-end' | 'pre-steal-countdown' | 'last-word-steal' | 'dispute' | 'finished';
 export type TeamId = 'teamA' | 'teamB';
 export type WordStatus = 'pending' | 'correct' | 'skipped';
+export type GameMode = 'simple' | 'steal';
 // Category is dynamic - populated from wordpacks. 'змішані' is special and means "all categories"
 export type Category = string;
 export type Difficulty = 'змішані' | 'легкі' | 'середні' | 'складні';
@@ -29,8 +30,9 @@ export interface GameSettings {
   difficulty: Difficulty;
   pointsToWin: number;
   wordsPerRound: number;
-  skipPenalty: number; // Points deducted for each skipped word (default: -1, 0 = no penalty)
-  lastWordStealEnabled: boolean; // Whether enemy team can steal the last unanswered word (default: false)
+  skipPenalty: number; // Points deducted for each skipped word (default: 0, negative values create penalty)
+  gameMode: GameMode; // 'simple' = all players see words, 'steal' = only explainer sees words, enemy can steal last word
+  lastWordStealEnabled: boolean; // Derived from gameMode for backward compatibility (gameMode === 'steal')
 }
 
 export interface CurrentRound {
@@ -55,6 +57,7 @@ export interface RoundHistory {
   durationSeconds: number;
   startedAt: string;
   endedAt: string;
+  finalWordIndex?: number; // Index of word being shown when round ended (undefined for legacy rounds)
 }
 
 export interface DisputeInfo {
@@ -66,10 +69,11 @@ export interface DisputeInfo {
   proposedStatus: WordStatus;
   initiatedBy: Player;
   reason: string;
+  wordTeam: TeamId; // The team that was playing when this word was used
   votes: Record<string, 'agree' | 'disagree'>;
   createdAt: string;
   resolvedAt?: string;
-  resolution?: 'accepted' | 'rejected' | 'tied';
+  resolution?: 'accepted' | 'rejected';
 }
 
 export interface PresenceInfo {
@@ -86,6 +90,7 @@ export interface LastWordStealInfo {
   startTime: number;
   timeRemaining: number;
   originalTeam: TeamId; // The team that failed to answer
+  preStealCountdown?: number; // Countdown before steal starts (5 seconds for opponent team to get ready)
 }
 
 export interface GameState {

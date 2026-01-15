@@ -92,6 +92,69 @@ export async function joinTeam(page: Page, team: 'A' | 'B'): Promise<void> {
 }
 
 /**
+ * Helper to configure game settings (host only)
+ * Settings are visible directly in the lobby for the host
+ */
+export async function configureGameSettings(
+  page: Page,
+  settings: {
+    pointsToWin?: number;
+    roundTime?: number;
+    gameMode?: 'simple' | 'steal';
+  }
+): Promise<void> {
+  // Wait for lobby settings to be visible
+  await page.waitForSelector('text=Налаштування гри', { timeout: 5000 });
+  await page.waitForTimeout(500);
+
+  // Set points to win (looking for the input near "Очки для перемоги")
+  if (settings.pointsToWin !== undefined) {
+    const pointsInput = page.locator('label:has-text("Очки для перемоги") + input[type="number"], label:has-text("Очки для перемоги") ~ input[type="number"]');
+    const inputVisible = await pointsInput.isVisible().catch(() => false);
+
+    if (inputVisible) {
+      await pointsInput.click();
+      await pointsInput.fill('');
+      await pointsInput.fill(settings.pointsToWin.toString());
+      await page.waitForTimeout(300);
+      console.log(`    Set pointsToWin to ${settings.pointsToWin}`);
+    } else {
+      console.log('    ⚠️  Could not find pointsToWin input');
+    }
+  }
+
+  // Set round time (looking for the select near "Час раунду")
+  if (settings.roundTime !== undefined) {
+    const timeSelect = page.locator('label:has-text("Час раунду") + select, label:has-text("Час раунду") ~ select');
+    const selectVisible = await timeSelect.isVisible().catch(() => false);
+
+    if (selectVisible) {
+      await timeSelect.selectOption({ value: settings.roundTime.toString() });
+      await page.waitForTimeout(300);
+      console.log(`    Set roundTime to ${settings.roundTime}`);
+    } else {
+      console.log('    ⚠️  Could not find roundTime select');
+    }
+  }
+
+  // Set game mode (looking for the select near "Режим гри")
+  if (settings.gameMode !== undefined) {
+    const modeSelect = page.locator('label:has-text("Режим гри") + select, label:has-text("Режим гри") ~ select');
+    const selectVisible = await modeSelect.isVisible().catch(() => false);
+
+    if (selectVisible) {
+      await modeSelect.selectOption({ value: settings.gameMode });
+      await page.waitForTimeout(300);
+      console.log(`    Set gameMode to ${settings.gameMode}`);
+    } else {
+      console.log('    ⚠️  Could not find gameMode select');
+    }
+  }
+
+  await page.waitForTimeout(500);
+}
+
+/**
  * Helper to start the game (host only)
  */
 export async function startGame(page: Page): Promise<void> {
@@ -160,6 +223,7 @@ export async function playRound(
     // Check if round has ended
     const roundEnded = await page.locator('text=Раунд завершено').isVisible().catch(() => false);
     if (roundEnded) {
+      console.log(`  Round ended after ${wordsPlayed} words (detected "Раунд завершено")`);
       break;
     }
 
@@ -167,6 +231,7 @@ export async function playRound(
     const word = await playWord(page, randomChoice ? 'correct' : 'skip');
 
     if (word === null) {
+      console.log(`  Stopped playing - no more words available (played ${wordsPlayed} words)`);
       break;
     }
 
@@ -175,6 +240,11 @@ export async function playRound(
     // Small delay to let the UI update
     await page.waitForTimeout(50);
   }
+
+  // Give the server extra time to process the last word and transition to round-end state
+  // This is critical when all words are played quickly in succession
+  console.log(`  Waiting for server to process round end...`);
+  await page.waitForTimeout(1000);
 
   return wordsPlayed;
 }
@@ -257,16 +327,59 @@ export async function continueToNextRound(page: Page): Promise<void> {
  * Helper to check if game has ended
  */
 export async function isGameEnded(page: Page): Promise<boolean> {
-  return await page.locator('text=Гра завершена').isVisible().catch(() => false);
+  // Check for multiple possible game end indicators
+  const gameEndIndicators = [
+    'text=Гра завершена',
+    'text=перемогла',
+    '.game-end-container',
+    '.winner-announcement'
+  ];
+
+  for (const indicator of gameEndIndicators) {
+    const isVisible = await page.locator(indicator).isVisible().catch(() => false);
+    if (isVisible) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 /**
- * Helper to wait for round end screen
- * Uses a shorter timeout since tests click through words quickly
+ * Helper to wait for round end screen OR game end screen
+ * After a round completes, it can either go to round-end or game-end (if winner)
  */
-export async function waitForRoundEnd(page: Page, timeout: number = 15000): Promise<void> {
-  await page.waitForSelector('text=Раунд завершено!', { timeout });
+export async function waitForRoundEnd(page: Page, timeout: number = 20000): Promise<'round-end' | 'game-end'> {
+  // After all words are played, the server calls endRound() which either:
+  // 1. Sets status to 'round-end' if no winner → shows RoundEndScreen
+  // 2. Sets status to 'finished' if team reached pointsToWin → shows GameEndScreen
+
+  // Wait for EITHER screen to appear
+  try {
+    await Promise.race([
+      page.waitForSelector('text=Раунд завершено!', { timeout, state: 'visible' }),
+      page.waitForSelector('.game-end-container', { timeout, state: 'visible' }),
+      page.waitForSelector('text=Гра завершена', { timeout, state: 'visible' })
+    ]);
+  } catch (error) {
+    // Log debug info if both fail
+    console.log('\n❌ Failed to find round end or game end screen');
+    const bodyText = await page.locator('body').textContent().catch(() => '(unable to get body text)');
+    console.log('Page body text (first 300 chars):', bodyText.substring(0, 300));
+
+    const visibleContainers = await page.locator('div[class*="container"]:visible').count().catch(() => 0);
+    console.log('Number of visible containers:', visibleContainers);
+
+    throw error;
+  }
+
+  // Determine which screen we're on
+  const isGameEnd = await page.locator('.game-end-container').isVisible().catch(() => false);
+
+  // Additional wait for any animations/transitions to complete
   await page.waitForTimeout(500);
+
+  return isGameEnd ? 'game-end' : 'round-end';
 }
 
 /**

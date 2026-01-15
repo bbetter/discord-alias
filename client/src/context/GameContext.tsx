@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode, useCallback, useMemo, useRef } from 'react';
 import { Socket } from 'socket.io-client';
-import { getSocket, disconnectSocket } from '@/services/socket';
+import { getSocket } from '@/services/socket';
 import type { GameState, Player, QuitWarnings, WordStatus } from '@/types/game';
 import { useAuth } from './AuthContext';
 import { SOCKET_EVENTS } from '@/constants/socketEvents';
@@ -15,7 +15,6 @@ interface GameContextType {
   error: string | null;
   quitWarnings: QuitWarnings | null;
   showQuitDialog: boolean;
-  showCloseDialog: boolean;
   rematchInfo: { newGameId: string; newRoomCode: string; message: string } | null;
   availableCategories: string[];
   joinGame: (gameId: string, roomCode: string) => void;
@@ -31,8 +30,6 @@ interface GameContextType {
   clearRematchInfo: () => void;
   quitGame: () => void;
   confirmQuit: (confirmed: boolean) => void;
-  closeActivity: () => void;
-  confirmCloseActivity: (confirmed: boolean) => void;
   initiateDispute: (roundNumber: number, wordIndex: number, proposedStatus: WordStatus, reason: string) => void;
   castDisputeVote: (vote: 'agree' | 'disagree') => void;
   cancelDispute: () => void;
@@ -62,7 +59,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   const [error, setError] = useState<string | null>(null);
   const [quitWarnings, setQuitWarnings] = useState<QuitWarnings | null>(null);
   const [showQuitDialog, setShowQuitDialog] = useState(false);
-  const [showCloseDialog, setShowCloseDialog] = useState(false);
   const [rematchInfo, setRematchInfo] = useState<{
     newGameId: string;
     newRoomCode: string;
@@ -135,11 +131,12 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     });
 
     socket.on(SOCKET_EVENTS.GAME_STATE, (data: { gameState: GameState }) => {
-      logger.log('[Socket] game-state event received', data.gameState.gameId, data.gameState.teams.teamA.players.length, data.gameState.teams.teamB.players.length);
+      logger.log('[Socket] game-state event received', data.gameState.gameId, data.gameState.status, data.gameState.roundNumber);
       setGameState(data.gameState);
     });
 
     socket.on(SOCKET_EVENTS.ROUND_STARTED, (data: { gameState: GameState }) => {
+      logger.log('[Socket] round-started event', data.gameState.roundNumber);
       setGameState(data.gameState);
     });
 
@@ -147,6 +144,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     // to prevent re-rendering the entire context tree every second
 
     socket.on(SOCKET_EVENTS.ROUND_ENDED, (data: { gameState: GameState }) => {
+      logger.log('[Socket] round-ended event', data.gameState.status, data.gameState.roundNumber);
       setGameState(data.gameState);
     });
 
@@ -179,22 +177,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
 
     socket.on(SOCKET_EVENTS.PLAYER_QUIT_EVENT, (data: { playerId: string; playerName: string }) => {
       logger.log(`Player ${data.playerName} has quit`);
-    });
-
-    socket.on(SOCKET_EVENTS.CLOSE_ACTIVITY_CONFIRMATION_REQUIRED, () => {
-      setShowCloseDialog(true);
-    });
-
-    socket.on(SOCKET_EVENTS.ACTIVITY_CLOSED, (data: { message: string }) => {
-      // Use error state to show toast notification instead of blocking alert
-      setError(data.message);
-      // Give user time to read the message before disconnecting
-      setTimeout(() => {
-        disconnectSocket();
-        setGameState(null);
-        setRoomCode(null);
-        setShowCloseDialog(false);
-      }, 2000);
     });
 
     socket.on(SOCKET_EVENTS.REMATCH_CREATED, (data: {
@@ -234,6 +216,24 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       }, 5000);
     });
 
+    socket.on(SOCKET_EVENTS.PRE_STEAL_COUNTDOWN_STARTED, (data: { gameState: GameState }) => {
+      logger.log('[Socket] Pre-steal countdown started');
+      setGameState(data.gameState);
+    });
+
+    socket.on(SOCKET_EVENTS.PRE_STEAL_COUNTDOWN_UPDATE, (data: { timeRemaining: number }) => {
+      setGameState((prevState) => {
+        if (!prevState || !prevState.lastWordSteal) return prevState;
+        return {
+          ...prevState,
+          lastWordSteal: {
+            ...prevState.lastWordSteal,
+            preStealCountdown: data.timeRemaining,
+          },
+        };
+      });
+    });
+
     socket.on(SOCKET_EVENTS.LAST_WORD_STEAL_STARTED, (data: { gameState: GameState }) => {
       logger.log('[Socket] Last word steal started');
       setGameState(data.gameState);
@@ -263,13 +263,13 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       socket.off(SOCKET_EVENTS.QUIT_CONFIRMATION_REQUIRED);
       socket.off(SOCKET_EVENTS.QUIT_CONFIRMED);
       socket.off(SOCKET_EVENTS.PLAYER_QUIT_EVENT);
-      socket.off(SOCKET_EVENTS.CLOSE_ACTIVITY_CONFIRMATION_REQUIRED);
-      socket.off(SOCKET_EVENTS.ACTIVITY_CLOSED);
       socket.off(SOCKET_EVENTS.REMATCH_CREATED);
       socket.off(SOCKET_EVENTS.DISPUTE_STARTED);
       socket.off(SOCKET_EVENTS.DISPUTE_VOTE_RECORDED);
       socket.off(SOCKET_EVENTS.DISPUTE_RESOLVED);
       socket.off(SOCKET_EVENTS.DISPUTE_ERROR);
+      socket.off(SOCKET_EVENTS.PRE_STEAL_COUNTDOWN_STARTED);
+      socket.off(SOCKET_EVENTS.PRE_STEAL_COUNTDOWN_UPDATE);
       socket.off(SOCKET_EVENTS.LAST_WORD_STEAL_STARTED);
       socket.off(SOCKET_EVENTS.STEAL_TIMER_UPDATE);
 
@@ -400,31 +400,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     [socket, gameState]
   );
 
-  const closeActivity = useCallback(() => {
-    if (!socket || !gameState || !isHost) return;
-
-    socket.emit(SOCKET_EVENTS.HOST_CLOSE_ACTIVITY, {
-      gameId: gameState.gameId,
-      confirmed: false,
-    });
-  }, [socket, gameState, isHost]);
-
-  const confirmCloseActivity = useCallback(
-    (confirmed: boolean) => {
-      if (!socket || !gameState) return;
-
-      if (confirmed) {
-        socket.emit(SOCKET_EVENTS.HOST_CLOSE_ACTIVITY, {
-          gameId: gameState.gameId,
-          confirmed: true,
-        });
-      } else {
-        setShowCloseDialog(false);
-      }
-    },
-    [socket, gameState]
-  );
-
   const createRematch = useCallback(() => {
     if (!socket || !gameState) return;
 
@@ -494,7 +469,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       error,
       quitWarnings,
       showQuitDialog,
-      showCloseDialog,
       rematchInfo,
       availableCategories,
       joinGame,
@@ -510,8 +484,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       clearRematchInfo,
       quitGame,
       confirmQuit,
-      closeActivity,
-      confirmCloseActivity,
       initiateDispute,
       castDisputeVote,
       cancelDispute,
@@ -526,7 +498,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       error,
       quitWarnings,
       showQuitDialog,
-      showCloseDialog,
       rematchInfo,
       availableCategories,
       joinGame,
@@ -542,8 +513,6 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
       clearRematchInfo,
       quitGame,
       confirmQuit,
-      closeActivity,
-      confirmCloseActivity,
       initiateDispute,
       castDisputeVote,
       cancelDispute,

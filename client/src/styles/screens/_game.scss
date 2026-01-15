@@ -1,60 +1,244 @@
 .game-container {
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background: $surface-color;
+  border-radius: 8px;
+  padding: 0;
   max-width: 800px;
   width: 100%;
+  overflow: hidden;
 
-  .game-header {
-    margin-bottom: 30px;
+  &.team-a-turn {
+    border: 3px solid $team-a-color;
+  }
 
-    .score-display {
+  &.team-b-turn {
+    border: 3px solid $team-b-color;
+  }
+
+  .game-content {
+    padding: 20px;
+  }
+
+  // Compact header with all key info in one row
+  .game-header-compact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    gap: 15px;
+
+    @media (max-width: 768px) {
+      padding: 10px 12px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 480px) {
+      padding: 8px 10px;
+      gap: 8px;
+    }
+
+    .card-piles {
       display: flex;
-      justify-content: space-between;
+      gap: 12px;
       align-items: center;
-      gap: 20px;
 
-      .team-score-item {
+      @media (max-width: 480px) {
+        gap: 8px;
+      }
+
+      .pile-counter {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        padding: 15px;
-        border-radius: 8px;
-        min-width: 150px;
+        gap: 6px;
+        padding: 6px 10px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
 
-        &.team-a-score {
-          background: rgba($team-a-color, 0.1);
-          color: $team-a-color;
+        @media (max-width: 480px) {
+          padding: 4px 8px;
+          gap: 4px;
         }
 
-        &.team-b-score {
-          background: rgba($team-b-color, 0.1);
-          color: $team-b-color;
-        }
-
-        strong {
-          font-size: 32px;
+        .pile-icon {
+          font-size: 16px;
           font-weight: 700;
+
+          @media (max-width: 480px) {
+            font-size: 14px;
+          }
+        }
+
+        .pile-dots {
+          display: flex;
+          gap: 3px;
+          flex-wrap: wrap;
+          max-width: 60px;
+
+          .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+
+            @media (max-width: 480px) {
+              width: 6px;
+              height: 6px;
+            }
+
+            &.green {
+              background: $success-color;
+            }
+
+            &.red {
+              background: $danger-color;
+            }
+          }
+        }
+
+        .pile-count {
+          font-size: 16px;
+          font-weight: 700;
+          color: $text-primary;
+
+          @media (max-width: 480px) {
+            font-size: 14px;
+          }
+        }
+
+        &.correct-pile {
+          border-color: $success-color;
+
+          .pile-icon {
+            color: $success-color;
+          }
+        }
+
+        &.skip-pile {
+          border-color: $danger-color;
+
+          .pile-icon {
+            color: $danger-color;
+          }
+        }
+      }
+    }
+
+    .timer-compact {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+
+      @media (max-width: 480px) {
+        padding: 6px 12px;
+        border-width: 2px;
+      }
+
+      .timer-value {
+        font-size: 28px;
+        font-weight: 900;
+        color: $text-primary;
+
+        @media (max-width: 768px) {
+          font-size: 24px;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 20px;
         }
       }
 
-      .timer {
-        font-size: 48px;
-        font-weight: 700;
-        padding: 20px;
-        background: #ecf0f1;
-        border-radius: 50%;
-        width: 100px;
-        height: 100px;
+      &.warning {
+        background: rgba(245, 158, 11, 0.3);
+        border-color: $warning-color;
+        animation: pulse-gentle 1s ease-in-out infinite;
+
+        .timer-value {
+          color: $warning-color;
+        }
+      }
+
+      &.critical {
+        background: rgba(239, 68, 68, 0.3);
+        border-color: $danger-color;
+        animation: pulse 0.6s ease-in-out infinite;
+
+        .timer-value {
+          color: $danger-color;
+        }
+      }
+    }
+
+    .scores-compact {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+
+      @media (max-width: 480px) {
+        gap: 8px;
+      }
+
+      .score-item {
         display: flex;
         align-items: center;
-        justify-content: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 2px solid;
 
-        &.warning {
-          background: $danger-color;
-          color: white;
-          animation: pulse 1s ease-in-out infinite;
+        @media (max-width: 480px) {
+          padding: 4px 8px;
+          gap: 4px;
+        }
+
+        .team-label {
+          font-size: 14px;
+          font-weight: 700;
+          text-transform: uppercase;
+
+          @media (max-width: 480px) {
+            font-size: 12px;
+          }
+        }
+
+        .team-score {
+          font-size: 22px;
+          font-weight: 900;
+
+          @media (max-width: 768px) {
+            font-size: 18px;
+          }
+
+          @media (max-width: 480px) {
+            font-size: 16px;
+          }
+        }
+
+        &.team-a {
+          border-color: $team-a-color;
+          background: rgba(59, 130, 246, 0.2);
+
+          .team-label,
+          .team-score {
+            color: $team-a-color;
+          }
+        }
+
+        &.team-b {
+          border-color: $team-b-color;
+          background: rgba(239, 68, 68, 0.2);
+
+          .team-label,
+          .team-score {
+            color: $team-b-color;
+          }
         }
       }
     }
@@ -63,65 +247,411 @@
   .game-view {
     text-align: center;
 
-    .current-team-display {
+    .current-team-banner {
       font-size: 18px;
-      color: $text-secondary;
-      margin-bottom: 20px;
+      font-weight: 700;
+      color: $text-primary;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      @media (max-width: 768px) {
+        font-size: 16px;
+        padding: 8px 15px;
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 14px;
+        padding: 6px 12px;
+        margin-bottom: 15px;
+      }
     }
 
-    .word-card {
-      background: $primary-color;
-      color: white;
-      padding: 60px 40px;
-      border-radius: 12px;
-      margin-bottom: 30px;
+    .word-card-container {
+      perspective: 1000px;
+      margin-bottom: 25px;
+      transition: transform 0.3s ease-out, opacity 0.3s ease-out;
 
-      .word-display {
-        font-size: 48px;
-        font-weight: 700;
+      @media (max-width: 768px) {
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 480px) {
         margin-bottom: 15px;
       }
 
-      .word-counter {
-        font-size: 18px;
-        opacity: 0.9;
+      &.exiting {
+        opacity: 0;
+
+        &.exit-right {
+          transform: translateX(100%) rotate(10deg);
+        }
+
+        &.exit-left {
+          transform: translateX(-100%) rotate(-10deg);
+        }
       }
     }
 
-    .action-buttons {
+    .word-card-game {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      padding: 0;
+      border: 4px solid;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4),
+                  0 4px 8px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+      margin: 0 auto;
+      overflow: hidden;
+
+      @media (max-width: 768px) {
+        border-width: 3px;
+        max-width: 100%;
+      }
+
+      @media (max-width: 480px) {
+        border-radius: 10px;
+      }
+
+      &.team-a-card {
+        border-color: $team-a-color;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(0, 0, 0, 0.5) 100%);
+      }
+
+      &.team-b-card {
+        border-color: $team-b-color;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(0, 0, 0, 0.5) 100%);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: rgba(0, 0, 0, 0.3);
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+        @media (max-width: 480px) {
+          padding: 10px 14px;
+        }
+
+        .card-category {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 14px;
+          font-weight: 600;
+          color: $text-secondary;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+
+          @media (max-width: 480px) {
+            font-size: 12px;
+            gap: 4px;
+          }
+
+          .category-icon {
+            font-size: 16px;
+
+            @media (max-width: 480px) {
+              font-size: 14px;
+            }
+          }
+        }
+
+        .difficulty-indicator {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+
+          @media (max-width: 480px) {
+            width: 10px;
+            height: 10px;
+          }
+        }
+      }
+
+      .card-word {
+        padding: 50px 30px;
+        font-size: 72px;
+        font-weight: 900;
+        color: $text-primary;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+        word-break: break-word;
+        line-height: 1;
+
+        @media (max-width: 768px) {
+          font-size: 56px;
+          padding: 40px 25px;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 42px;
+          padding: 30px 20px;
+        }
+      }
+
+      .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: rgba(0, 0, 0, 0.3);
+        border-top: 2px solid rgba(255, 255, 255, 0.1);
+
+        @media (max-width: 480px) {
+          padding: 10px 14px;
+        }
+
+        .difficulty-badge {
+          display: inline-block;
+          padding: 4px 10px;
+          background: rgba(255, 255, 255, 0.15);
+          border-radius: 4px;
+          font-size: 12px;
+          font-weight: 600;
+          color: $text-secondary;
+          text-transform: uppercase;
+
+          @media (max-width: 480px) {
+            font-size: 11px;
+            padding: 3px 8px;
+          }
+        }
+
+        .card-number {
+          font-size: 14px;
+          font-weight: 600;
+          color: $text-secondary;
+
+          @media (max-width: 480px) {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+
+    .round-complete-message {
+      padding: 60px 20px;
+      font-size: 28px;
+      font-weight: 700;
+      color: $text-secondary;
+
+      @media (max-width: 768px) {
+        padding: 40px 15px;
+        font-size: 24px;
+      }
+
+      @media (max-width: 480px) {
+        padding: 30px 10px;
+        font-size: 20px;
+      }
+    }
+
+    .action-buttons-compact {
       display: flex;
-      gap: 15px;
+      gap: 12px;
       justify-content: center;
       margin-bottom: 20px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+
+      @media (max-width: 768px) {
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      @media (max-width: 480px) {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .btn-action {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 16px 20px;
+        border-radius: 8px;
+        font-weight: 700;
+        border: 3px solid;
+        transition: all 0.2s ease;
+        cursor: pointer;
+
+        @media (max-width: 768px) {
+          padding: 14px 16px;
+          gap: 5px;
+        }
+
+        @media (max-width: 480px) {
+          flex-direction: row;
+          justify-content: center;
+          padding: 12px 16px;
+        }
+
+        &:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        &:active:not(:disabled) {
+          transform: translateY(0);
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .action-icon {
+          font-size: 28px;
+
+          @media (max-width: 768px) {
+            font-size: 24px;
+          }
+
+          @media (max-width: 480px) {
+            font-size: 20px;
+          }
+        }
+
+        .action-text {
+          font-size: 16px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+
+          @media (max-width: 768px) {
+            font-size: 14px;
+          }
+
+          @media (max-width: 480px) {
+            font-size: 13px;
+          }
+        }
+
+        .keyboard-hint {
+          font-size: 11px;
+          opacity: 0.8;
+          font-weight: 600;
+          background: rgba(0, 0, 0, 0.3);
+          padding: 3px 8px;
+          border-radius: 4px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+
+          @media (max-width: 480px) {
+            display: none;
+          }
+        }
+
+        &.btn-correct {
+          background: rgba(16, 185, 129, 0.2);
+          border-color: $success-color;
+          color: $success-color;
+
+          &:hover:not(:disabled) {
+            background: rgba(16, 185, 129, 0.3);
+          }
+        }
+
+        &.btn-skip {
+          background: rgba(239, 68, 68, 0.2);
+          border-color: $danger-color;
+          color: $danger-color;
+
+          &:hover:not(:disabled) {
+            background: rgba(239, 68, 68, 0.3);
+          }
+        }
+      }
     }
 
-    .keyboard-hint {
-      font-size: 12px;
-      opacity: 0.7;
-      font-weight: normal;
-      margin-left: 8px;
-      display: inline-block;
-    }
+    .secondary-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
 
-    .hint-text {
-      color: $text-secondary;
-      font-size: 14px;
-      margin-top: 20px;
+      .btn-secondary {
+        background: rgba(0, 0, 0, 0.3);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: $text-secondary;
+        padding: 8px 16px;
+        font-size: 14px;
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.5);
+          border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .keyboard-hint {
+          font-size: 11px;
+          opacity: 0.8;
+          font-weight: 600;
+          margin-left: 6px;
+          display: inline-block;
+          background: rgba(0, 0, 0, 0.3);
+          padding: 2px 6px;
+          border-radius: 3px;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+      }
     }
 
     .waiting-display {
       padding: 60px 20px;
 
+      @media (max-width: 768px) {
+        padding: 40px 15px;
+      }
+
+      @media (max-width: 480px) {
+        padding: 30px 10px;
+      }
+
       h2 {
-        font-size: 28px;
+        font-size: 32px;
         margin-bottom: 15px;
+        font-weight: 700;
+        color: $text-primary;
+
+        @media (max-width: 768px) {
+          font-size: 24px;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 20px;
+        }
       }
 
       p {
         color: $text-secondary;
         font-size: 18px;
+        font-weight: 500;
+
+        @media (max-width: 768px) {
+          font-size: 16px;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 14px;
+        }
       }
     }
+  }
+
+  .game-bottom-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 
@@ -130,6 +660,15 @@
     transform: scale(1);
   }
   50% {
-    transform: scale(1.05);
+    transform: scale(1.08);
+  }
+}
+
+@keyframes pulse-gentle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
   }
 }

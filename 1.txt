@@ -1,0 +1,11 @@
+
+> discord-alias-game@2.0.0 test:orchestrated
+> playwright test orchestrated-game-clean.spec.ts --headed
+
+Error: Process from config.webServer exited early.
+
+[1A[2K
+To open last HTML report run:
+[36m[39m
+[36m  npx playwright show-report[39m
+[36m[39m

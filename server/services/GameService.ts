@@ -1,5 +1,6 @@
 import { getRandomWords } from '../word-loader.js';
 import { SnapshotService } from './SnapshotService.js';
+import { sessionLoggerService } from './SessionLoggerService.js';
 import type {
   GameState,
   GameSettings,
@@ -26,6 +27,9 @@ export class GameService {
   }
 
   createGame(instanceId: string, hostId: string): GameState {
+    // Start session logging for this game
+    const logger = sessionLoggerService.startSession(instanceId);
+
     const gameState: GameState = {
       gameId: instanceId,
       status: 'lobby',
@@ -37,7 +41,8 @@ export class GameService {
         difficulty: 'змішані',
         pointsToWin: 30,
         wordsPerRound: 20,
-        skipPenalty: -1,
+        skipPenalty: 0,
+        gameMode: 'simple',
         lastWordStealEnabled: false,
       },
       teams: {
@@ -68,6 +73,14 @@ export class GameService {
 
     this.games.set(instanceId, gameState);
     this.snapshotService.saveSnapshot(gameState);
+
+    logger.info({
+      tag: 'GAME',
+      gameId: instanceId,
+      hostId,
+      action: 'game_created',
+    }, '[GAME] Game created');
+
     return gameState;
   }
 
@@ -89,6 +102,19 @@ export class GameService {
     game.teams[team].players.push(player);
 
     this.snapshotService.saveSnapshot(game);
+
+    const logger = sessionLoggerService.getLogger(gameId);
+    if (logger) {
+      logger.info({
+        tag: 'PLAYER',
+        gameId,
+        playerId: player.id,
+        team,
+        teamName: game.teams[team].name,
+        action: 'team_changed',
+      }, `[PLAYER] ${player.username} joined ${game.teams[team].name}`);
+    }
+
     return game;
   }
 
@@ -176,8 +202,32 @@ export class GameService {
     if (settings.pointsToWin !== undefined) {
       game.settings.pointsToWin = settings.pointsToWin;
     }
+    if (settings.skipPenalty !== undefined) {
+      game.settings.skipPenalty = settings.skipPenalty;
+    }
+    if (settings.gameMode !== undefined) {
+      game.settings.gameMode = settings.gameMode;
+      // Keep lastWordStealEnabled in sync with gameMode
+      game.settings.lastWordStealEnabled = settings.gameMode === 'steal';
+    }
+    if (settings.lastWordStealEnabled !== undefined) {
+      game.settings.lastWordStealEnabled = settings.lastWordStealEnabled;
+      // Sync gameMode when lastWordStealEnabled is updated directly (for backward compatibility)
+      game.settings.gameMode = settings.lastWordStealEnabled ? 'steal' : 'simple';
+    }
 
     this.snapshotService.saveSnapshot(game);
+
+    const logger = sessionLoggerService.getLogger(gameId);
+    if (logger) {
+      logger.info({
+        tag: 'GAME',
+        gameId,
+        playerId,
+        settings,
+        action: 'settings_updated',
+      }, '[GAME] Settings updated');
+    }
 
     return game;
   }
@@ -199,6 +249,19 @@ export class GameService {
     game.currentTeam = 'teamA';
 
     this.snapshotService.saveSnapshot(game);
+
+    const logger = sessionLoggerService.getLogger(gameId);
+    if (logger) {
+      logger.info({
+        tag: 'GAME',
+        gameId,
+        playerId,
+        teamAPlayers: game.teams.teamA.players.map(p => p.username),
+        teamBPlayers: game.teams.teamB.players.map(p => p.username),
+        action: 'game_started',
+      }, '[GAME] Game started');
+    }
+
     return this.startRound(gameId);
   }
 
@@ -250,6 +313,21 @@ export class GameService {
 
     game.status = 'countdown';
 
+    const logger = sessionLoggerService.getLogger(gameId);
+    if (logger) {
+      logger.info({
+        tag: 'ROUND',
+        gameId,
+        roundNumber: game.roundNumber,
+        team: game.currentTeam,
+        teamName: team.name,
+        explainerId: explainer.id,
+        explainerName: explainer.username,
+        wordCount: cards.length,
+        action: 'round_started',
+      }, `[ROUND] Round ${game.roundNumber} started - ${team.name}, explainer: ${explainer.username}`);
+    }
+
     return game;
   }
 
@@ -297,6 +375,20 @@ export class GameService {
 
     game.currentRound.wordIndex++;
 
+    const logger = sessionLoggerService.getLogger(gameId);
+    if (logger) {
+      logger.debug({
+        tag: 'ROUND',
+        gameId,
+        playerId,
+        word: currentCard.word,
+        status,
+        wordIndex: game.currentRound.wordIndex,
+        totalCards: game.currentRound.cards.length,
+        action: 'word_marked',
+      }, `[ROUND] Word marked: ${currentCard.word} - ${status}`);
+    }
+
     if (game.currentRound.wordIndex >= game.currentRound.cards.length) {
       return this.endRound(gameId);
     }
@@ -315,7 +407,7 @@ export class GameService {
     if (game.settings.lastWordStealEnabled) {
       const lastCard = game.currentRound.cards[game.currentRound.cards.length - 1];
       if (lastCard && lastCard.status === 'pending') {
-        // Initiate last word steal
+        // Initiate pre-steal countdown (5 seconds for opponent team to get ready)
         const stealingTeam = game.currentRound.team === 'teamA' ? 'teamB' : 'teamA';
         game.lastWordSteal = {
           word: lastCard.word,
@@ -324,8 +416,9 @@ export class GameService {
           startTime: Date.now(),
           timeRemaining: 15,
           originalTeam: game.currentRound.team,
+          preStealCountdown: 5,
         };
-        game.status = 'last-word-steal';
+        game.status = 'pre-steal-countdown';
         this.snapshotService.saveSnapshot(game);
         return game;
       }
@@ -354,12 +447,43 @@ export class GameService {
       durationSeconds: durationSeconds,
       startedAt: new Date(roundStartTime).toISOString(),
       endedAt: new Date(roundEndTime).toISOString(),
+      finalWordIndex: game.currentRound.wordIndex,
     });
+
+    const logger = sessionLoggerService.getLogger(gameId);
+    if (logger) {
+      logger.info({
+        tag: 'ROUND',
+        gameId,
+        roundNumber: game.roundNumber,
+        team: game.currentRound.team,
+        correctCount: game.currentRound.correctCount,
+        skippedCount: game.currentRound.skippedCount,
+        points,
+        durationSeconds,
+        action: 'round_ended',
+      }, `[ROUND] Round ${game.roundNumber} ended - correct: ${game.currentRound.correctCount}, skipped: ${game.currentRound.skippedCount}, points: ${points}`);
+    }
 
     if (game.teams[game.currentRound.team].score >= game.settings.pointsToWin) {
       game.status = 'finished';
       game.endedAt = new Date().toISOString();
       game.winner = game.currentRound.team;
+
+      if (logger) {
+        logger.info({
+          tag: 'GAME',
+          gameId,
+          winner: game.winner,
+          teamAScore: game.teams.teamA.score,
+          teamBScore: game.teams.teamB.score,
+          totalRounds: game.history.length,
+          duration: game.endedAt && game.startedAt ?
+            Math.floor((new Date(game.endedAt).getTime() - new Date(game.startedAt).getTime()) / 1000) : 0,
+          action: 'game_finished',
+        }, `[GAME] Game finished - Winner: ${game.teams[game.winner].name}`);
+      }
+
       game.currentRound = null;
       this.snapshotService.saveSnapshot(game);
       return game;
@@ -402,6 +526,22 @@ export class GameService {
 
     // Now properly end the round and add to history
     return this.finishRoundAfterSteal(gameId);
+  }
+
+  startLastWordSteal(gameId: string): GameState | null {
+    const game = this.games.get(gameId);
+    if (!game || game.status !== 'pre-steal-countdown' || !game.lastWordSteal) {
+      return null;
+    }
+
+    // Transition from pre-steal countdown to actual last word steal
+    game.status = 'last-word-steal';
+    game.lastWordSteal.startTime = Date.now();
+    game.lastWordSteal.timeRemaining = 15;
+    game.lastWordSteal.preStealCountdown = undefined;
+
+    this.snapshotService.saveSnapshot(game);
+    return game;
   }
 
   endLastWordSteal(gameId: string): GameState | null {
@@ -450,6 +590,7 @@ export class GameService {
       durationSeconds: durationSeconds,
       startedAt: new Date(roundStartTime).toISOString(),
       endedAt: new Date(roundEndTime).toISOString(),
+      finalWordIndex: game.currentRound.wordIndex,
     });
 
     // Check for win condition
@@ -576,11 +717,17 @@ export class GameService {
 
     // Remove from active games (RAM)
     this.games.delete(gameId);
+
+    // End session logging
+    sessionLoggerService.endSession(gameId);
   }
 
   deleteGame(gameId: string): void {
     this.snapshotService.deleteSnapshot(gameId);
     this.games.delete(gameId);
+
+    // End session logging
+    sessionLoggerService.endSession(gameId);
   }
 
   getAllGames(): Map<string, GameState> {
@@ -731,6 +878,7 @@ export class GameService {
       proposedStatus,
       initiatedBy: player,
       reason,
+      wordTeam: roundHistory.team, // The team that was playing this round
       votes: {},
       createdAt: new Date().toISOString(),
     };
@@ -771,19 +919,41 @@ export class GameService {
       return { error: 'Гравець не знайдений у грі' };
     }
 
+    // Determine which team the player is on
+    const isOnTeamA = game.teams.teamA.players.some((p) => p.id === playerId);
+    const playerTeam = isOnTeamA ? 'teamA' : 'teamB';
+
+    // Only enemy team can vote (opposite of the team whose word is being disputed)
+    if (playerTeam === game.currentDispute.wordTeam) {
+      return { error: 'Ви не можете голосувати за слово своєї команди' };
+    }
+
     // Record the vote
     game.currentDispute.votes[playerId] = vote;
 
-    // Check if all players have voted
-    const totalPlayers = allPlayers.length;
-    const voteCount = Object.keys(game.currentDispute.votes).length;
+    // Get enemy team players
+    const enemyTeam = game.currentDispute.wordTeam === 'teamA' ? game.teams.teamB : game.teams.teamA;
+    const enemyTeamPlayerIds = new Set(enemyTeam.players.map((p) => p.id));
 
-    if (voteCount >= totalPlayers) {
-      // All players have voted, resolve the dispute
+    // Count votes from enemy team only
+    const enemyVotes = Object.entries(game.currentDispute.votes).filter(
+      ([voterId]) => enemyTeamPlayerIds.has(voterId)
+    );
+    const agreeVotes = enemyVotes.filter(([_, v]) => v === 'agree').length;
+    const totalEnemyPlayers = enemyTeam.players.length;
+    const requiredVotes = Math.ceil(totalEnemyPlayers / 2);
+
+    // Resolve if half or more enemy team members voted "agree"
+    if (agreeVotes >= requiredVotes) {
       return this.resolveDispute(gameId);
     }
 
-    // Not all voted yet, just save and return
+    // Resolve as rejected if all enemy team members have voted and threshold not reached
+    if (enemyVotes.length >= totalEnemyPlayers) {
+      return this.resolveDispute(gameId);
+    }
+
+    // Not enough votes yet, just save and return
     this.snapshotService.saveSnapshot(game);
     return game;
   }
@@ -797,20 +967,20 @@ export class GameService {
 
     const dispute = game.currentDispute;
 
-    // Count votes
-    const votes = Object.values(dispute.votes);
-    const agreeCount = votes.filter((v) => v === 'agree').length;
-    const disagreeCount = votes.filter((v) => v === 'disagree').length;
+    // Get enemy team players (only they can vote)
+    const enemyTeam = dispute.wordTeam === 'teamA' ? game.teams.teamB : game.teams.teamA;
+    const enemyTeamPlayerIds = new Set(enemyTeam.players.map((p) => p.id));
 
-    // Determine resolution
-    let resolution: 'accepted' | 'rejected' | 'tied';
-    if (agreeCount > disagreeCount) {
-      resolution = 'accepted';
-    } else if (disagreeCount > agreeCount) {
-      resolution = 'rejected';
-    } else {
-      resolution = 'tied';
-    }
+    // Count votes from enemy team only
+    const enemyVotes = Object.entries(dispute.votes).filter(
+      ([voterId]) => enemyTeamPlayerIds.has(voterId)
+    );
+    const agreeCount = enemyVotes.filter(([_, v]) => v === 'agree').length;
+    const totalEnemyPlayers = enemyTeam.players.length;
+    const requiredVotes = Math.ceil(totalEnemyPlayers / 2);
+
+    // Determine resolution: accepted if half or more enemy team voted "agree"
+    const resolution: 'accepted' | 'rejected' = agreeCount >= requiredVotes ? 'accepted' : 'rejected';
 
     dispute.resolution = resolution;
     dispute.resolvedAt = new Date().toISOString();
